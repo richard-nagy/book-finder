@@ -1,7 +1,7 @@
-import BookList from "./pages/book-search/List";
+import List from "./pages/book-search/List";
 
 const App = () => {
-    return <BookList />;
+    return <List />;
 };
 
 export default App;

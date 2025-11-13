@@ -1,3 +1,4 @@
+import { Input } from "@/components/ui/input";
 import { debounce } from "lodash";
 import {
     useCallback,
@@ -50,7 +51,7 @@ const DebouncedInput: FC<DebouncedInputType> = (
         };
     }, [debouncedOnChange]);
 
-    return <input type="text" value={inputValue} onChange={handleChange} />;
+    return <Input type="text" value={inputValue} onChange={handleChange} />;
 };
 
 export default DebouncedInput;
