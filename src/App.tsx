@@ -1,5 +1,4 @@
-import { debounce } from "lodash";
-import { useCallback, useEffect, useMemo, useState, type FC } from "react";
+import { useCallback, useState, type FC } from "react";
 import Input from "./components/Input";
 
 interface BookDoc {
@@ -26,23 +25,9 @@ const App: FC = () => {
         }
     }, []);
 
-    const debouncedTransition = useMemo(
-        () =>
-            debounce((value: string) => {
-                fetchBooks(value);
-            }, 500),
-        [fetchBooks],
-    );
-
-    useEffect(() => {
-        return () => {
-            debouncedTransition.cancel();
-        };
-    }, [debouncedTransition]);
-
     return (
         <div>
-            <Input onChange={debouncedTransition} debounceMs={250} />
+            <Input onChange={fetchBooks} debounceMs={250} />
             <ul>
                 {books.map((b) => (
                     <li key={b.key}>{b.title}</li>

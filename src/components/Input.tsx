@@ -1,5 +1,12 @@
 import { debounce } from "lodash";
-import { useMemo, useState, type ChangeEvent, type ReactElement } from "react";
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+    type ChangeEvent,
+    type ReactElement,
+} from "react";
 
 type InputType = {
     /** Will run on input change. */
@@ -12,7 +19,7 @@ const Input = (props: InputType): ReactElement => {
 
     const [inputValue, setInputValue] = useState("");
 
-    const debouncedTransition = useMemo(
+    const debouncedOnChange = useMemo(
         () =>
             debounce((value: string) => {
                 onChange(value);
@@ -20,16 +27,25 @@ const Input = (props: InputType): ReactElement => {
         [debounceMs, onChange],
     );
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const newValue = e.target.value;
-        setInputValue(newValue);
+    const handleChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const newValue = e.target.value;
+            setInputValue(newValue);
 
-        if (debounceMs) {
-            debouncedTransition(newValue);
-        } else {
-            onChange(newValue);
-        }
-    };
+            if (debounceMs) {
+                debouncedOnChange(newValue);
+            } else {
+                onChange(newValue);
+            }
+        },
+        [debounceMs, debouncedOnChange, onChange],
+    );
+
+    useEffect(() => {
+        return () => {
+            debouncedOnChange.cancel();
+        };
+    }, [debouncedOnChange]);
 
     return <input type="text" value={inputValue} onChange={handleChange} />;
 };
