@@ -1,9 +1,10 @@
 import { AppSidebar } from "@/components/app-sidebar";
-import { ModeToggle } from "@/components/mode-toggle";
+import { SettingsDropDown } from "@/components/settings-dropdown";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import List from "./pages/book-search/List";
+import List from "./routes/book-search/List";
 
 const App = () => {
     return (
@@ -15,7 +16,10 @@ const App = () => {
                     <main className="flex-1 overflow-y-auto p-3">
                         <div className="flex justify-between w-full mb-3">
                             <SidebarTrigger />
-                            <ModeToggle />
+                            <div className="flex gap-3">
+                                <ThemeToggle />
+                                <SettingsDropDown />
+                            </div>
                         </div>
                         <List />
                     </main>

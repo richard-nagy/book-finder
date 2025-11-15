@@ -1,4 +1,4 @@
-import DebouncedInput from "@/pages/book-search/DebouncedInput";
+import DebouncedInput from "@/routes/book-search/DebouncedInput";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import type { BookDoc, OpenLibraryResponse } from "./types";
