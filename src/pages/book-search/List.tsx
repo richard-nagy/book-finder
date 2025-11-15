@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/mode-toggle";
 import DebouncedInput from "@/pages/book-search/DebouncedInput";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
@@ -20,22 +21,16 @@ const List = () => {
                 errorMessage = error.message;
             }
 
+            console.error(error);
             toast.error("Search Failed", {
                 description: `Error details: ${errorMessage}`,
-                // style: {
-                //     '--normal-bg':
-                //         'color-mix(in oklab, light-dark(var(--color-green-600), var(--color-green-400)) 10%, var(--background))',
-                //     '--normal-text': 'light-dark(var(--color-green-600), var(--color-green-400))',
-                //     '--normal-border': 'light-dark(var(--color-green-600), var(--color-green-400))'
-                // } as React.CSSProperties
-            })
-
-            console.error(error);
+            });
         }
     }, []);
 
     return (
         <div>
+            <ModeToggle />
             <DebouncedInput onChange={fetchBooks} debounceMs={250} />
             <ul>
                 {books.map((b) => (

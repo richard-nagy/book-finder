@@ -3,5 +3,6 @@
     "semi": true,
     "tabWidth": 4,
     "singleQuote": false,
-    "experimentalTernaries": true
+    "experimentalTernaries": true,
+    "trailingComma": "all"
 }
