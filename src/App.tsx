@@ -11,10 +11,10 @@ const App = () => {
         <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
             <Toaster />
             <SidebarProvider>
-                <div className="flex h-screen w-full">
+                <div className="flex w-full h-screen">
                     <AppSidebar />
-                    <main className="flex-1 overflow-y-auto p-3">
-                        <div className="flex justify-between w-full mb-3">
+                    <main className="flex-1 overflow-y-auto flex flex-col">
+                        <div className="flex justify-between w-full sticky top-0 p-3">
                             <SidebarTrigger />
                             <div className="flex gap-3">
                                 <ThemeToggle />

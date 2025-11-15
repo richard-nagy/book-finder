@@ -1,14 +1,14 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
 import DebouncedInput from "@/routes/book-search/DebouncedInput";
+import type { BookDoc, OpenLibraryResponse } from "@/utils/types";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import type { BookDoc, OpenLibraryResponse } from "./types";
 
 const List = () => {
     const [books, setBooks] = useState<BookDoc[]>([]);
 
     const fetchBooks = useCallback(async (searchQuery: string) => {
         try {
-            throw new Error("Test error");
             const url = `https://openlibrary.org/search.json?q=${encodeURIComponent(searchQuery)}`;
             const response = await fetch(url);
             const data: OpenLibraryResponse = await response.json();
@@ -28,7 +28,7 @@ const List = () => {
     }, []);
 
     return (
-        <div>
+        <ScrollArea className="rounded-lg mx-3 mb-3 p-3 flex-1 overflow-y-auto bg-primary-foreground">
             <DebouncedInput onChange={fetchBooks} debounceMs={250} />
             <ul>
                 {books.map((b) => (
@@ -37,7 +37,7 @@ const List = () => {
                     </li>
                 ))}
             </ul>
-        </div>
+        </ScrollArea>
     );
 };
 
