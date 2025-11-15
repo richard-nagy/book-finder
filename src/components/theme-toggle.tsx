@@ -2,16 +2,20 @@ import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
     DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useTheme } from "@/components/useTheme";
+import { Theme } from "@/utils/types";
 import { Moon, Sun } from "lucide-react";
+import { useState } from "react";
 
 export function ThemeToggle() {
     const { setTheme } = useTheme();
+
+    const [position, setPosition] = useState("system");
 
     return (
         <DropdownMenu>
@@ -24,17 +28,23 @@ export function ThemeToggle() {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" align="start">
                 <DropdownMenuLabel>Theme</DropdownMenuLabel>
-                <DropdownMenuGroup>
-                    <DropdownMenuItem onClick={() => setTheme("system")}>
+                <DropdownMenuRadioGroup
+                    value={position}
+                    onValueChange={(value) => {
+                        setPosition(value);
+                        setTheme(value as Theme);
+                    }}
+                >
+                    <DropdownMenuRadioItem value={Theme.system}>
                         System
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("light")}>
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value={Theme.light}>
                         Light
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value={Theme.dark}>
                         Dark
-                    </DropdownMenuItem>
-                </DropdownMenuGroup>
+                    </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
     );
