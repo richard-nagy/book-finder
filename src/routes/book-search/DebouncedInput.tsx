@@ -10,14 +10,14 @@ import {
     type ReactElement,
 } from "react";
 
-type DebouncedInputType = {
+type DebouncedInputProps = {
     /** Will run on input change. */
     onChange: (value: string) => void;
     /** If defined, the input change will be debounced by this value in milliseconds.  */
     debounceMs?: number;
 };
-const DebouncedInput: FC<DebouncedInputType> = (
-    props: DebouncedInputType,
+const DebouncedInput: FC<DebouncedInputProps> = (
+    props: DebouncedInputProps,
 ): ReactElement => {
     const { debounceMs, onChange } = props;
 

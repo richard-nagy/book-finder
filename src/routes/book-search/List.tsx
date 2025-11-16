@@ -1,3 +1,4 @@
+import Book from "@/components/book/book";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import DebouncedInput from "@/routes/book-search/DebouncedInput";
 import type { BookDoc, OpenLibraryResponse } from "@/utils/types";
@@ -30,13 +31,11 @@ const List = () => {
     return (
         <ScrollArea className="rounded-lg mx-3 mb-3 p-3 flex-1 overflow-y-auto bg-primary-foreground">
             <DebouncedInput onChange={fetchBooks} debounceMs={250} />
-            <ul>
+            <div className="flex flex-wrap gap-3 mt-3 justify-center">
                 {books.map((b) => (
-                    <li key={b.key}>
-                        {b.author_name} - {b.title}
-                    </li>
+                    <Book key={b.key} book={b} />
                 ))}
-            </ul>
+            </div>
         </ScrollArea>
     );
 };
