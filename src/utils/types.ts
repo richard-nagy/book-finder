@@ -2,6 +2,7 @@ export type BookDoc = {
     title: string;
     author_name: string[];
     key: string;
+    isbn?: string;
 };
 
 export type OpenLibraryResponse = {

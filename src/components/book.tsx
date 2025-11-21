@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/item";
 import type { BookDoc } from "@/utils/types";
 import { Star } from "lucide-react";
-import type { FC, ReactElement } from "react";
+import { type FC, type ReactElement } from "react";
 
 type BookProps = {
     book: BookDoc;
@@ -28,16 +28,17 @@ const Book: FC<BookProps> = (props: BookProps): ReactElement => {
                 />
             </ItemHeader>
             <ItemContent>
-                <ItemTitle>
-                    {book.author_name}
-                </ItemTitle>
-                <ItemDescription>
-                    {book.title}
-                </ItemDescription>
+                <ItemTitle>{book.author_name}</ItemTitle>
+                <ItemDescription>{book.title}</ItemDescription>
             </ItemContent>
             <ItemActions>
                 <Button variant="outline" size="icon">
-                    <ToggleButton Icon1={Star} Icon2={Star} text="Toggle Favorite" icon2Fill="white" />
+                    <ToggleButton
+                        Icon1={Star}
+                        Icon2={Star}
+                        text="Toggle Favorite"
+                        icon2Fill="white"
+                    />
                 </Button>
             </ItemActions>
         </Item>
