@@ -15,8 +15,8 @@ type DebouncedInputProps = {
     debounceMs?: number;
     /** Placeholder text for the input. */
     placeholder?: string;
-    /** Will run on input change. */
-    onChange: (value: string) => void;
+    /** Runs on input change. */
+    onChange: (value: string) => void | Promise<void>;
 };
 const DebouncedInput: FC<DebouncedInputProps> = (
     props: DebouncedInputProps,

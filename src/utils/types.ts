@@ -1,3 +1,4 @@
+/** Data of a book. */
 export interface Volume {
     id: string,
     volumeInfo: {
@@ -20,6 +21,7 @@ export interface Volume {
     },
 }
 
+/** Response of the search. */
 export interface BookResponse {
     kind: string;
     totalItems: number;
