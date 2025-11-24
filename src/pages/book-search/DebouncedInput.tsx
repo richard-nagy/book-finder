@@ -26,7 +26,8 @@ type DebouncedInputProps = {
 const DebouncedInput: FC<DebouncedInputProps> = (
     props: DebouncedInputProps,
 ): ReactElement => {
-    const { debounceMs, placeholder, className, onChange, handleKeyDown } = props;
+    const { debounceMs, placeholder, className, onChange, handleKeyDown } =
+        props;
 
     const [inputValue, setInputValue] = useState("");
 

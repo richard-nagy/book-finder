@@ -58,7 +58,7 @@ const List = () => {
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
-                : <div className="flex flex-wrap gap-3 mt-15 justify-center">
+            :   <div className="flex flex-wrap gap-3 mt-15 justify-center">
                     {books?.map((b) => (
                         <Book key={b.id} book={b} />
                     ))}

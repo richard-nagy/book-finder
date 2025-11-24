@@ -11,7 +11,7 @@ const apiKey = import.meta.env.VITE_GOOGLE_BOOK_API_KEY;
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
 
 export interface BookSearchContextType {
-    /** 
+    /**
      * List of books.
      * If null, no search was performed.
      */
@@ -22,13 +22,13 @@ export interface BookSearchContextType {
     volumeFetchIsLoading: boolean;
     /**
      * Fetches the books.
-     * @param searchQuery The query filtering is based upon. 
+     * @param searchQuery The query filtering is based upon.
      * @param startIndex Starting index from where the books will be returned from the original list.
      */
     fetchBooks: (searchQuery: string, startIndex?: number) => Promise<void>;
     /**
      * Fetches a specific book.
-     * @param volumeId 
+     * @param volumeId
      * @returns Returns the the data of the book. Returns null if there were no result.
      */
     getBookByVolumeId: (volumeId: string) => Promise<Volume | null>;
@@ -50,10 +50,7 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                     throw new Error("Missing API Key");
                 }
 
-                if (
-                    !searchQuery ||
-                    searchQuery === ""
-                ) {
+                if (!searchQuery || searchQuery === "") {
                     setBooks(null);
                     return;
                 }

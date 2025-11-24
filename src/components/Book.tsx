@@ -22,7 +22,10 @@ const Book: FC<BookProps> = (props: BookProps): ReactElement => {
         <Item variant="muted" className="max-w-80">
             <ItemHeader>
                 <img
-                    src={book.volumeInfo?.imageLinks?.smallThumbnail ?? "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"}
+                    src={
+                        book.volumeInfo?.imageLinks?.smallThumbnail ??
+                        "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"
+                    }
                     alt={book.id + "img"}
                     className="w-max min-h-40 object-cover"
                 />
