@@ -12,13 +12,9 @@ export interface Volume {
         pageCount: number,
         averageRating: number,
         ratingsCount: number,
-        imageLinks: {
-            smallThumbnail: string,
-            thumbnail: string,
-            small: string,
-            medium: string,
-            large: string,
-            extraLarge: string
+        imageLinks?: {
+            smallThumbnail?: string,
+            thumbnail?: string,
         },
         language: string,
     },
