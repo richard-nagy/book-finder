@@ -8,12 +8,12 @@ import {
     ItemHeader,
     ItemTitle,
 } from "@/components/ui/item";
-import type { BookDoc } from "@/utils/types";
+import type { Volume } from "@/utils/types";
 import { Star } from "lucide-react";
 import { type FC, type ReactElement } from "react";
 
 type BookProps = {
-    book: BookDoc;
+    book: Volume;
 };
 const Book: FC<BookProps> = (props: BookProps): ReactElement => {
     const { book } = props;
@@ -22,14 +22,14 @@ const Book: FC<BookProps> = (props: BookProps): ReactElement => {
         <Item variant="muted" className="max-w-80">
             <ItemHeader>
                 <img
-                    src="https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"
-                    alt={book.key + "img"}
-                    className="aspect-square w-full rounded-sm object-cover"
+                    src={book.volumeInfo.imageLinks.smallThumbnail ?? "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"}
+                    alt={book.id + "img"}
+                    className="w-max min-h-40 rounded-sm object-cover"
                 />
             </ItemHeader>
             <ItemContent>
-                <ItemTitle>{book.author_name}</ItemTitle>
-                <ItemDescription>{book.title}</ItemDescription>
+                <ItemTitle>{book.volumeInfo.authors?.map((a) => a)}</ItemTitle>
+                <ItemDescription>{book.volumeInfo.title}</ItemDescription>
             </ItemContent>
             <ItemActions>
                 <Button variant="outline" size="icon">

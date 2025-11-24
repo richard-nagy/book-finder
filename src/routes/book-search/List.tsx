@@ -12,7 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 import DebouncedInput from "@/routes/book-search/DebouncedInput";
 
 const List = () => {
-    const { books, isLoading, fetchBooks } = useBookSearch();
+    const { books, bookFetchIsLoading, fetchBooks } = useBookSearch();
 
     return (
         <ScrollArea className="rounded-lg mx-3 mb-3 p-3 flex-1 overflow-y-auto bg-primary-foreground">
@@ -21,7 +21,7 @@ const List = () => {
                 placeholder="Start typing to search for books..."
                 onChange={fetchBooks}
             />
-            {isLoading && (
+            {bookFetchIsLoading && (
                 <Empty className="w-full">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
@@ -35,8 +35,8 @@ const List = () => {
                 </Empty>
             )}
             <div className="flex flex-wrap gap-3 mt-3 justify-center">
-                {books.map((b) => (
-                    <Book key={b.key} book={b} />
+                {books?.map((b) => (
+                    <Book key={b.id} book={b} />
                 ))}
             </div>
         </ScrollArea>

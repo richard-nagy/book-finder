@@ -1,15 +1,17 @@
-import type { BookDoc } from "@/utils/types";
+import type { BookResponse, Volume } from "@/utils/types";
 import { useCallback, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { BookSearchContext } from "./BookSearchContext";
 
-const YOUR_API_KEY = "";
-const BASE_URL = "https://www.googleapis.com/books/v1/volumes";
+const apiKey = import.meta.env.VITE_GOOGLE_BOOK_API_KEY;
+const baseUrl = "https://www.googleapis.com/books/v1/volumes";
 
 export interface BookSearchContextType {
-    books: BookDoc[];
-    isLoading: boolean;
+    books: Volume[] | null;
+    bookFetchIsLoading: boolean;
+    volumeFetchIsLoading: boolean;
     fetchBooks: (searchQuery: string) => Promise<void>;
+    getBookByVolumeId: (volumeId: string) => Promise<Volume | null>;
 }
 
 interface BookSearchProviderProps {
@@ -17,35 +19,32 @@ interface BookSearchProviderProps {
 }
 
 export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
-    const [books, setBooks] = useState<BookDoc[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [books, setBooks] = useState<Volume[] | null>(null);
+    const [bookFetchIsLoading, setBookFetchIsLoading] = useState(false);
+    const [volumeFetchIsLoading, setVolumeFetchIsLoading] = useState(false);
 
-    const fetchBooks = useCallback(async (searchQuery: string) => {
+    const fetchBooks = useCallback(async (searchQuery: string): Promise<void> => {
         if (!searchQuery || searchQuery === "" || searchQuery.length <= 3) {
-            setBooks([]);
+            setBooks(null);
             return;
         }
 
-        setIsLoading(true);
+        setBookFetchIsLoading(true);
 
-        const url = new URL(BASE_URL);
-        url.searchParams.append("q", searchQuery);
-        url.searchParams.append("key", YOUR_API_KEY);
+        const url = `${baseUrl}?q=${encodeURIComponent(searchQuery)}&key=${apiKey}`;
 
         try {
-            const response = await fetch(url.toString());
+            const response = await fetch(url);
 
             if (!response.ok) {
                 throw new Error(`HTTP error! Status: ${response.status} ${response.statusText}`);
             }
 
-            const data = await response.json();
+            const data: BookResponse = await response.json();
 
-            console.log(`Found ${data.totalItems} books.`);
-            data.items.forEach((item: any, index: number) => {
-                console.log(`${index + 1}. Title: ${item.volumeInfo.title}`);
-                console.log(`   Authors: ${item.volumeInfo.authors ? item.volumeInfo.authors.join(', ') : 'N/A'}`);
-            });
+            if (data.items && (data.items?.length ?? 0) > 0) {
+                setBooks(data.items);
+            }
         } catch (error) {
             let errorMessage = "An unknown error occurred.";
 
@@ -58,68 +57,39 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                 description: `Error details: ${errorMessage}`,
             });
         } finally {
-            setIsLoading(false);
+            setBookFetchIsLoading(false);
         }
     }, []);
 
-    // const fetchCover = useCallback(async (isbn: string): Promise<ArrayBuffer | null> => {
-    //     try {
-    //         const url = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
-    //         const response = await fetch(url);
+    const getBookByVolumeId = useCallback(async (volumeId: string): Promise<Volume | null> => {
+        setVolumeFetchIsLoading(true);
+        let result: Volume | null = null;
+        const url = `${baseUrl}/${volumeId}?key=${apiKey}`;
 
-    //         if (!response.ok) {
-    //             if (response.status === 404) {
-    //                 return null;
-    //             }
+        try {
+            const response = await fetch(url);
 
-    //             throw new Error(`Failed to fetch cover. Status: ${response.status}`);
-    //         }
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
 
-    //         const buffer: ArrayBuffer = await response.arrayBuffer();
-    //         return buffer;
-    //     } catch (error) {
-    //         let errorMessage = "An unknown error occurred.";
+            const data = await response.json();
+            result = data;
+        } catch (error) {
+            console.error("Error fetching book data:", error);
+        } finally {
+            setVolumeFetchIsLoading(false);
+        }
 
-    //         if (error instanceof Error) {
-    //             errorMessage = error.message;
-    //         }
-
-    //         console.error(error);
-    //         toast.error("Cover fetching failed", {
-    //             description: `Error details: ${errorMessage}`,
-    //         });
-
-    //         return null;
-    //     }
-    // }, []);
-
-    // const getBookCover = useCallback(async (isbn: string | undefined) => {
-    //     if (!isbn) {
-    //         return null;
-    //     }
-
-    //     const coverUrl: string | undefined | null = coverMap.get(isbn);
-
-    //     if (coverUrl !== undefined) {
-    //         return coverUrl;
-    //     }
-
-    //     const cover = await fetchCover(isbn);
-    //     const cover2 = cover
-    //         ? bufferToBase64(cover)
-    //         : null;
-
-    //     setCoverMap((oldCoverMap) => {
-    //         const newCoverMap = new Map([...oldCoverMap]);
-    //         newCoverMap.set(isbn, cover2);
-    //         return newCoverMap;
-    //     });
-    // }, [coverMap, fetchCover]);
+        return result;
+    }, [])
 
     const value = {
         books,
-        isLoading,
+        bookFetchIsLoading,
+        volumeFetchIsLoading,
         fetchBooks,
+        getBookByVolumeId,
     };
 
     return (
