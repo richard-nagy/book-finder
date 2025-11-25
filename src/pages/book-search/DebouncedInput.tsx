@@ -20,6 +20,8 @@ type DebouncedInputProps = {
     placeholder?: string;
     /** className prop for the Input component. */
     className?: string;
+    /** If true the text will be focused by default. */
+    autoFocus?: boolean;
     /** Runs on input change. */
     onChange: (value: string) => void | Promise<void>;
     /** Handle on key down event. */
@@ -33,6 +35,7 @@ const DebouncedInput: FC<DebouncedInputProps> = (
         placeholder,
         className,
         defaultValue,
+        autoFocus,
         onChange,
         handleKeyDown,
     } = props;
@@ -73,6 +76,7 @@ const DebouncedInput: FC<DebouncedInputProps> = (
             type="text"
             value={inputValue}
             placeholder={placeholder}
+            autoFocus={autoFocus}
             onKeyDown={handleKeyDown}
             onChange={handleChange}
         />

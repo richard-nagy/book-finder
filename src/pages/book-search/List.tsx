@@ -53,6 +53,7 @@ const List = () => {
                     className="w-75"
                     // debounceMs={250}
                     // placeholder="Start typing to search for books..."
+                    autoFocus={true}
                     defaultValue={inputValue}
                     onChange={setInputValue}
                     handleKeyDown={handleKeyDown}
@@ -73,7 +74,7 @@ const List = () => {
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
-            :   <div className="flex flex-wrap gap-3 mt-15 justify-center">
+            :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
                     {books?.map((b) => (
                         <Book key={b.id} book={b} />
                     ))}

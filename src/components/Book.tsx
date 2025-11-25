@@ -1,15 +1,5 @@
-import { ToggleButton } from "@/components/ToggleButton";
-import { Button } from "@/components/ui/button";
-import {
-    Item,
-    ItemActions,
-    ItemContent,
-    ItemDescription,
-    ItemHeader,
-    ItemTitle,
-} from "@/components/ui/item";
+import { TypographyMuted } from "@/components/ui/typography";
 import type { Volume } from "@/utils/types";
-import { Star } from "lucide-react";
 import { type FC, type ReactElement } from "react";
 
 type BookProps = {
@@ -19,32 +9,29 @@ const Book: FC<BookProps> = (props: BookProps): ReactElement => {
     const { book } = props;
 
     return (
-        <Item variant="muted" className="max-w-80">
-            <ItemHeader>
-                <img
-                    src={
-                        book.volumeInfo?.imageLinks?.smallThumbnail ??
-                        "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"
-                    }
-                    alt={book.id + "img"}
-                    className="w-max min-h-40 object-cover"
-                />
-            </ItemHeader>
-            <ItemContent>
-                <ItemTitle>{book.volumeInfo.authors?.map((a) => a)}</ItemTitle>
-                <ItemDescription>{book.volumeInfo.title}</ItemDescription>
-            </ItemContent>
-            <ItemActions>
-                <Button variant="outline" size="icon">
-                    <ToggleButton
-                        Icon1={Star}
-                        Icon2={Star}
-                        text="Toggle Favorite"
-                        icon2Fill="white"
-                    />
-                </Button>
-            </ItemActions>
-        </Item>
+        <div className="w-50">
+            <img
+                src={
+                    book.volumeInfo?.imageLinks?.smallThumbnail ??
+                    "https://images.unsplash.com/photo-1610280777472-54133d004c8c?q=80&w=640&auto=format&fit=crop"
+                }
+                alt={book.id + "img"}
+                className="w-50 object-cover mb-2"
+            />
+            {(book.volumeInfo?.authors?.length ?? 0) > 0 ?
+                book.volumeInfo?.authors?.map((a, i) => (
+                    <TypographyMuted>
+                        {a}
+                        {i + 1 !== (book.volumeInfo?.authors.length ?? 0) &&
+                            ","}
+                    </TypographyMuted>
+                ))
+            :   <TypographyMuted className="italic">
+                    � Unknown author(s)
+                </TypographyMuted>
+            }
+            <div className="mt-2">{book.volumeInfo.title}</div>
+        </div>
     );
 };
 
