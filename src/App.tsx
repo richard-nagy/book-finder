@@ -4,8 +4,9 @@ import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { Outlet } from "react-router-dom";
 import { BookSearchProvider } from "./components/book/BookSearchProvider";
-import List from "./pages/book-search/List";
 
 const App = () => {
     return (
@@ -23,7 +24,9 @@ const App = () => {
                                     <SettingsDropDown />
                                 </div>
                             </div>
-                            <List />
+                            <ScrollArea className="rounded-lg mx-3 mb-3 p-3 flex-1 overflow-y-auto bg-primary-foreground relative">
+                                <Outlet />
+                            </ScrollArea>
                         </main>
                     </div>
                 </SidebarProvider>

@@ -8,7 +8,6 @@ import {
     EmptyMedia,
     EmptyTitle,
 } from "@/components/ui/empty";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spinner } from "@/components/ui/spinner";
 import DebouncedInput from "@/pages/book-search/DebouncedInput";
 import { Search } from "lucide-react";
@@ -33,7 +32,7 @@ const List = () => {
     );
 
     return (
-        <ScrollArea className="rounded-lg mx-3 mb-3 p-3 flex-1 overflow-y-auto bg-primary-foreground relative">
+        <>
             <div className="left flex flex-row gap-2 justify-center align-middle absolute bg-primary-foreground pb-3 z-1 w-[calc(100%-24px)]">
                 <DebouncedInput
                     className="w-75"
@@ -64,7 +63,7 @@ const List = () => {
                     ))}
                 </div>
             }
-        </ScrollArea>
+        </>
     );
 };
 
