@@ -69,6 +69,8 @@
 */
 
 :root {
+    /* The color of the hover effect. */
+    --hover: oklch(0.879 0.191 95.024);
     /* The standard border radius used for rounding corners of elements. */
     --radius: 0.625rem;
     /* The primary background color of the page/component. */
@@ -153,7 +155,7 @@
     --destructive: oklch(0.704 0.191 22.216);
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
+    --ring: oklch(0.795 0.184 86.047);
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
@@ -201,4 +203,12 @@
 
 .lucide {
     stroke-width: 2.5px;
+}
+
+.button-custom-hover {
+    transition: background-color 300ms ease-in-out;
+}
+
+.button-custom-hover:hover {
+    background-color: var(--hover);
 }
