@@ -41,38 +41,97 @@
     --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* 
+    Calculated amber color palette:
+      50: oklch(0.987 0.026 102.212)
+     100: oklch(0.973 0.071 103.193)
+     150: oklch(0.959 0.100 102.367)
+     200: oklch(0.945 0.129 101.540)
+     250: oklch(0.925 0.155 99.826)
+     300: oklch(0.905 0.182 98.111)
+     350: oklch(0.879 0.191 95.024)
+     400: oklch(0.852 0.199 91.936)
+     450: oklch(0.824 0.192 88.992)
+     500: oklch(0.795 0.184 86.047)
+     550: oklch(0.738 0.173 80.941)
+     600: oklch(0.681 0.162 75.834)
+     650: oklch(0.618 0.149 71.138)
+     700: oklch(0.554 0.135 66.442)
+     750: oklch(0.515 0.124 64.174)
+     800: oklch(0.476 0.114 61.907)
+     850: oklch(0.449 0.105 59.807)
+     900: oklch(0.421 0.095 57.708)
+     925: oklch(0.353 0.081 55.761)
+     950: oklch(0.286 0.066 53.813)
+    1000: oklch(0.200 0.046 53.813)
+    1050: oklch(0.167 0.039 53.813)
+    1100: oklch(0.133 0.031 53.813)
+*/
+
 :root {
+    /* The standard border radius used for rounding corners of elements. */
     --radius: 0.625rem;
+    /* The primary background color of the page/component. */
     --background: oklch(1 0 0);
+    /* The primary text color, typically used on the background color. */
     --foreground: oklch(0.145 0 0);
+    /* The background color for card components. */
     --card: oklch(1 0 0);
+    /* The text color used inside card components. */
     --card-foreground: oklch(0.145 0 0);
+    /* The background color for pop-up or modal elements. */
     --popover: oklch(1 0 0);
+    /* The text color used inside pop-up elements. */
     --popover-foreground: oklch(0.145 0 0);
+    /* The main color for primary actions, buttons, or active states. */
     --primary: oklch(0.205 0 0);
+    /* The text color used on the primary color. */
     --primary-foreground: oklch(0.985 0 0);
+    /* A color for secondary actions or less prominent components. */
     --secondary: oklch(0.97 0 0);
+    /* The text color used on the secondary color. */
     --secondary-foreground: oklch(0.205 0 0);
+    /* A color for less important elements, like subtle backgrounds or borders. */
     --muted: oklch(0.97 0 0);
+    /* A subdued text color for secondary information or placeholders. */
     --muted-foreground: oklch(0.556 0 0);
+    /* A color for highlighting or drawing attention to an element. */
     --accent: oklch(0.97 0 0);
+    /* The text color used on the accent color. */
     --accent-foreground: oklch(0.205 0 0);
+    /* A color typically used for alerts, errors, or dangerous actions. */
     --destructive: oklch(0.577 0.245 27.325);
+    /* The color used for component borders and dividers. */
     --border: oklch(0.922 0 0);
+    /* The color used for input fields or form elements. */
     --input: oklch(0.922 0 0);
+    /* A color used for the focus ring around interactive elements. */
     --ring: oklch(0.708 0 0);
+    /* The first color in a sequence for distinguishing chart data. */
     --chart-1: oklch(0.646 0.222 41.116);
+    /* The second color in a sequence for chart data. */
     --chart-2: oklch(0.6 0.118 184.704);
+    /* The third color in a sequence for chart data. */
     --chart-3: oklch(0.398 0.07 227.392);
+    /* The fourth color in a sequence for chart data. */
     --chart-4: oklch(0.828 0.189 84.429);
+    /* The fifth color in a sequence for chart data. */
     --chart-5: oklch(0.769 0.188 70.08);
+    /* The background color for a sidebar or navigation panel. */
     --sidebar: oklch(0.985 0 0);
+    /* The primary text color within the sidebar. */
     --sidebar-foreground: oklch(0.145 0 0);
+    /* A primary action color specific to the sidebar. */
     --sidebar-primary: oklch(0.205 0 0);
+    /* The text color used on the sidebar primary color. */
     --sidebar-primary-foreground: oklch(0.985 0 0);
+    /* An accent color specific to the sidebar. */
     --sidebar-accent: oklch(0.97 0 0);
+    /* The text color used on the sidebar accent color. */
     --sidebar-accent-foreground: oklch(0.205 0 0);
+    /* The border color for the sidebar. */
     --sidebar-border: oklch(0.922 0 0);
+    /* The focus ring color for interactive elements in the sidebar. */
     --sidebar-ring: oklch(0.708 0 0);
 }
 
@@ -83,7 +142,7 @@
     --card-foreground: oklch(0.985 0 0);
     --popover: oklch(0.205 0 0);
     --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
+    --primary: oklch(0.795 0.184 86.047);
     --primary-foreground: oklch(0.205 0 0);
     --secondary: oklch(0.269 0 0);
     --secondary-foreground: oklch(0.985 0 0);
@@ -131,11 +190,15 @@
     .dark {
         --sidebar: oklch(0.205 0 0);
         --sidebar-foreground: oklch(0.985 0 0);
-        --sidebar-primary: oklch(0.488 0.243 264.376);
+        --sidebar-primary: oklch(0.795 0.184 86.047);
         --sidebar-primary-foreground: oklch(0.985 0 0);
         --sidebar-accent: oklch(0.269 0 0);
         --sidebar-accent-foreground: oklch(0.985 0 0);
         --sidebar-border: oklch(1 0 0 / 10%);
         --sidebar-ring: oklch(0.439 0 0);
     }
+}
+
+.lucide {
+    stroke-width: 2.5px;
 }
