@@ -1,7 +1,12 @@
-import type { FC, ReactElement } from "react";
+import { useBookSearch } from "@/components/book/BookSearchContext";
+import { type FC, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 
 const PageNotFound: FC = (): ReactElement => {
+    const { clearResults } = useBookSearch();
+
+    clearResults();
+
     return (
         <div className="text-center p-12">
             <h2 className="text-6xl font-bold mb-4">404</h2>

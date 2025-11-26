@@ -1,12 +1,15 @@
+import { useBookSearch } from "@/components/book/BookSearchContext";
 import { Button } from "@/components/ui/button";
 import type { FC } from "react";
 import { Link, useRouteError } from "react-router-dom";
 
 const CustomErrorBoundary: FC = () => {
+    const { clearResults } = useBookSearch();
     const error = useRouteError();
     const isError = error instanceof Error;
 
     console.error("Route Error Caught:", error);
+    clearResults();
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen p-6">
