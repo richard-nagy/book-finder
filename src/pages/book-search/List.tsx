@@ -10,8 +10,15 @@ import {
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
 import DebouncedInput from "@/pages/book-search/DebouncedInput";
+import { isStringEmpty } from "@/utils/common";
 import { Search } from "lucide-react";
-import { useCallback, useEffect, useState, type KeyboardEvent } from "react";
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+    type KeyboardEvent,
+} from "react";
 import { useSearchParams } from "react-router-dom";
 
 const List = () => {
@@ -25,6 +32,8 @@ const List = () => {
         searchQuery,
     );
 
+    const isInputEmpty = useMemo(() => isStringEmpty(inputValue), [inputValue]);
+
     useEffect(() => {
         setInputValue(searchQuery);
     }, [searchQuery]);
@@ -35,11 +44,11 @@ const List = () => {
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === "Enter" && inputValue) {
+            if (event.key === "Enter" && inputValue && isInputEmpty) {
                 navigateToSearchQuery();
             }
         },
-        [navigateToSearchQuery, inputValue],
+        [inputValue, isInputEmpty, navigateToSearchQuery],
     );
 
     useEffect(() => {
@@ -58,7 +67,7 @@ const List = () => {
                     onChange={setInputValue}
                     handleKeyDown={handleKeyDown}
                 />
-                <Button onClick={navigateToSearchQuery}>
+                <Button disabled={isInputEmpty} onClick={navigateToSearchQuery}>
                     <Search /> Search
                 </Button>
             </div>
