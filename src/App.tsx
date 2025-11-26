@@ -4,8 +4,9 @@ import { ThemeToggle } from "@/components/theme/ThemeToggle";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { BookSearchProvider } from "./components/book/BookSearchProvider";
+import HomeButton from "./components/HomeButton";
 import { Button } from "./components/ui/button";
 
 const App = () => {
@@ -20,7 +21,7 @@ const App = () => {
                             <div className="flex justify-between w-full sticky top-0 p-3">
                                 {/* <SidebarTrigger /> */}
                                 <Button asChild>
-                                    <Link to="/">Go to Home Page</Link>
+                                    <HomeButton />
                                 </Button>
                                 <div className="flex gap-3">
                                     <ThemeToggle />

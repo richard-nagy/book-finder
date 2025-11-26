@@ -27,12 +27,7 @@ export const ToggleButton: FC<ToggleButtonProps> = (props) => {
     };
 
     return (
-        <Button
-            variant="outline"
-            size="icon"
-            onClick={toggleSelection}
-            className="relative"
-        >
+        <Button className="relative" onClick={toggleSelection}>
             <Icon1
                 className={`h-[1.2rem] w-[1.2rem] transition-all 
                     ${isSelected ? "scale-100 rotate-0" : "scale-0 -rotate-90"}`}
