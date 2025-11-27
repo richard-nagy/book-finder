@@ -55,7 +55,7 @@ const List = () => {
 
     const handleKeyDown = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
-            if (event.key === "Enter" && inputValue && isInputEmpty) {
+            if (event.key === "Enter" && inputValue && !isInputEmpty) {
                 navigateToSearchQuery();
             }
         },
