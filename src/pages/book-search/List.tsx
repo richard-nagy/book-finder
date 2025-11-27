@@ -1,5 +1,4 @@
 import Book from "@/components/Book";
-import { useBookSearch } from "@/context/BookSearchContext";
 import { Button } from "@/components/ui/button";
 import {
     Empty,
@@ -9,6 +8,7 @@ import {
     EmptyTitle,
 } from "@/components/ui/empty";
 import { Spinner } from "@/components/ui/spinner";
+import { useBookSearch } from "@/context/BookSearchContext";
 import DebouncedInput from "@/pages/book-search/DebouncedInput";
 import { isStringEmpty } from "@/utils/common";
 import { SearchQuery } from "@/utils/types";
@@ -94,10 +94,17 @@ const List = () => {
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
-            :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
-                    {books?.map((b) => (
-                        <Book key={b.id} book={b} />
-                    ))}
+                : <div className="flex flex-wrap gap-6 mt-15 justify-center">
+                    {books && books.length <= 0 ?
+                        <Empty className="w-full mt-10">
+                            <EmptyHeader>
+                                <EmptyTitle>No results</EmptyTitle>
+                                <EmptyDescription>
+                                    No books were found.
+                                </EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
+                        : books?.map((b) => <Book key={b.id} book={b} />)}
                 </div>
             }
             {maxNumberOfPages > 0 && <ListPagination />}
