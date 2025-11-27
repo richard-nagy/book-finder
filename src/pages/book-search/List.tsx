@@ -1,5 +1,5 @@
 import Book from "@/components/Book";
-import { useBookSearch } from "@/components/book/BookSearchContext";
+import { useBookSearch } from "@/context/BookSearchContext";
 import { Button } from "@/components/ui/button";
 import {
     Empty,
@@ -32,7 +32,7 @@ const List = () => {
     const searchQuery = searchParams.get(SearchQuery.q) ?? undefined;
 
     const currentPageNumber = useMemo(
-        () => parseInt(searchParams.get(SearchQuery.page) ?? "0"),
+        () => parseInt(searchParams.get(SearchQuery.page) ?? "1"),
         [searchParams],
     );
 
@@ -94,7 +94,7 @@ const List = () => {
                         </EmptyDescription>
                     </EmptyHeader>
                 </Empty>
-                : <div className="flex flex-wrap gap-6 mt-15 justify-center">
+            :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
                     {books?.map((b) => (
                         <Book key={b.id} book={b} />
                     ))}

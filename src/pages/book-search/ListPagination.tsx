@@ -1,4 +1,4 @@
-import { useBookSearch } from "@/components/book/BookSearchContext";
+import { useBookSearch } from "@/context/BookSearchContext";
 import {
     Pagination,
     PaginationButton,
@@ -61,7 +61,7 @@ const ListPagination: FC = (): ReactElement => {
     const pageNationItemsToRender = useMemo(() => {
         return [
             <PaginationPrevious
-                disabled={currentPageNumber > 1}
+                disabled={currentPageNumber <= 1}
                 onClick={() => changePageNumber(currentPageNumber - 1)}
             />,
             currentPageNumber - 2 > 1 ? paginationEllipsis : null,
@@ -74,7 +74,7 @@ const ListPagination: FC = (): ReactElement => {
                 paginationEllipsis
             :   null,
             <PaginationNext
-                disabled={currentPageNumber < maxNumberOfPages}
+                disabled={currentPageNumber >= maxNumberOfPages}
                 onClick={() => changePageNumber(currentPageNumber + 1)}
             />,
         ];

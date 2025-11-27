@@ -76,7 +76,7 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
 
                 setBookFetchIsLoading(true);
 
-                const url = `${baseUrl}?q=${encodeURIComponent(searchQuery)}&key=${apiKey}&maxResults=${maxResults}&startIndex=${startIndex * maxResults}`;
+                const url = `${baseUrl}?q=${encodeURIComponent(searchQuery)}&key=${apiKey}&maxResults=${maxResults}&startIndex=${(startIndex - 1) * maxResults}`;
 
                 const response = await fetch(url);
 

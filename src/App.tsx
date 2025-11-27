@@ -5,7 +5,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Outlet } from "react-router-dom";
-import { BookSearchProvider } from "./components/book/BookSearchProvider";
+import { BookSearchProvider } from "./context/BookSearchProvider";
 import HomeButton from "./components/HomeButton";
 import { Button } from "./components/ui/button";
 
