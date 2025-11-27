@@ -1,4 +1,4 @@
-import { isStringEmpty } from "@/utils/common";
+import { attemptFetch, isStringEmpty } from "@/utils/common";
 import type { BookResponse, Volume } from "@/utils/types";
 import { useCallback, useState, type ReactNode } from "react";
 import { toast } from "sonner";
@@ -10,6 +10,49 @@ const maxResults = 40;
 const apiKey = import.meta.env.VITE_GOOGLE_BOOK_API_KEY;
 /** Base url of the Google Books API */
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
+/** Max number of retries if the fetch failed. */
+const maxRetries = 3;
+/** Delay time in ms if the fetch failed. */
+const delayMs = 1000;
+
+const fetchBooksCore = async (
+    searchQuery: string,
+    startIndex: number,
+    apiKey: string,
+): Promise<BookResponse> => {
+    const url = `${baseUrl}?q=${encodeURIComponent(
+        searchQuery,
+    )}&key=${apiKey}&maxResults=${maxResults}&startIndex=${
+        (startIndex - 1) * maxResults
+    }`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(
+            `HTTP error! Status: ${response.status} ${response.statusText}`,
+        );
+    }
+
+    const data: BookResponse = await response.json();
+    return data;
+};
+
+const getBookByVolumeIdCore = async (
+    volumeId: string,
+    apiKey: string,
+): Promise<Volume> => {
+    const url = `${baseUrl}/${volumeId}?key=${apiKey}`;
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data: Volume = await response.json();
+    return data;
+};
 
 export interface BookSearchContextType {
     /**
@@ -76,17 +119,11 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
 
                 setBookFetchIsLoading(true);
 
-                const url = `${baseUrl}?q=${encodeURIComponent(searchQuery)}&key=${apiKey}&maxResults=${maxResults}&startIndex=${(startIndex - 1) * maxResults}`;
-
-                const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error(
-                        `HTTP error! Status: ${response.status} ${response.statusText}`,
-                    );
-                }
-
-                const data: BookResponse = await response.json();
+                const data = await attemptFetch(
+                    () => fetchBooksCore(searchQuery, startIndex, apiKey),
+                    maxRetries,
+                    delayMs,
+                );
 
                 if (data.totalItems > 0) {
                     setMaxNumberOfPages(
@@ -99,7 +136,6 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                 }
             } catch (error) {
                 let errorMessage = "An unknown error occurred.";
-
                 if (error instanceof Error) {
                     errorMessage = error.message;
                 }
@@ -118,19 +154,20 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
 
     const getBookByVolumeId = useCallback(
         async (volumeId: string): Promise<Volume | null> => {
-            setVolumeFetchIsLoading(true);
             let result: Volume | null = null;
-            const url = `${baseUrl}/${volumeId}?key=${apiKey}`;
+
+            setVolumeFetchIsLoading(true);
 
             try {
-                const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
+                if (!apiKey || !volumeId) {
+                    throw new Error("Missing API Key or Volume ID");
                 }
 
-                const data = await response.json();
-                result = data;
+                result = await attemptFetch(
+                    () => getBookByVolumeIdCore(volumeId, apiKey),
+                    maxRetries,
+                    delayMs,
+                );
             } catch (error) {
                 console.error("Error fetching book data:", error);
             } finally {
