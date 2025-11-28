@@ -1,23 +1,59 @@
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 
-// function TypographyH4({
-//     className,
-//     children,
-//     ...props
-// }: HTMLAttributes<HTMLHeadingElement>) {
-//     return (
-//         <h4
-//             className={cn(
-//                 "scroll-m-20 text-xl font-semibold tracking-tight",
-//                 className,
-//             )}
-//             {...props}
-//         >
-//             {children}
-//         </h4>
-//     );
-// }
+function TypographyH2({
+    className,
+    children,
+    ...props
+}: HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h3
+            className={cn(
+                "scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+                className,
+            )}
+            {...props}
+        >
+            {children}
+        </h3>
+    );
+}
+
+function TypographyH3({
+    className,
+    children,
+    ...props
+}: HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h3
+            className={cn(
+                "scroll-m-20 text-2xl font-semibold tracking-tight",
+                className,
+            )}
+            {...props}
+        >
+            {children}
+        </h3>
+    );
+}
+
+function TypographyH4({
+    className,
+    children,
+    ...props
+}: HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h4
+            className={cn(
+                "scroll-m-20 text-xl font-semibold tracking-tight",
+                className,
+            )}
+            {...props}
+        >
+            {children}
+        </h4>
+    );
+}
 
 function TypographyP({
     className,
@@ -49,4 +85,10 @@ function TypographyMuted({
     );
 }
 
-export { TypographyMuted, TypographyP };
+export {
+    TypographyMuted,
+    TypographyP,
+    TypographyH4,
+    TypographyH3,
+    TypographyH2,
+};

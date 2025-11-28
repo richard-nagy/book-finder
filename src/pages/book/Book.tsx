@@ -1,9 +1,13 @@
 import EmptyView from "@/components/EmptyView";
 import { Spinner } from "@/components/ui/spinner";
-import { TypographyMuted } from "@/components/ui/typography";
+import {
+    TypographyH3,
+    TypographyH4,
+    TypographyMuted,
+} from "@/components/ui/typography";
 import { useBookSearch } from "@/context/BookSearchContext";
 import type { Volume } from "@/utils/types";
-import { CircleQuestionMark } from "lucide-react";
+import { CircleQuestionMark, Star } from "lucide-react";
 import { useEffect, useState, type FC, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 
@@ -42,7 +46,7 @@ const Book: FC = (): ReactElement => {
     }
 
     return (
-        <>
+        <div className="flex justify-center gap-10">
             <img
                 src={
                     volume.volumeInfo?.imageLinks?.smallThumbnail ??
@@ -51,20 +55,47 @@ const Book: FC = (): ReactElement => {
                 alt={volume.id + "img"}
                 className="w-50 object-cover mb-2"
             />
-            {(volume.volumeInfo?.authors?.length ?? 0) > 0 ?
-                volume.volumeInfo?.authors?.map((a, i) => (
+            <div className="max-w-200 flex-column">
+                {(volume.volumeInfo?.authors?.length ?? 0) > 0 ?
+                    volume.volumeInfo?.authors?.map((a, i) => (
+                        <TypographyH4 className="text-secondary-foreground">
+                            {a}
+                            {i + 1 !==
+                                (volume?.volumeInfo?.authors?.length ?? 0) &&
+                                ","}
+                        </TypographyH4>
+                    ))
+                :   <TypographyH4 className="italic">
+                        � Unknown author(s)
+                    </TypographyH4>
+                }
+                <div className="gap-2 mt-2 flex items-center">
+                    <TypographyH3>
+                        {volume.volumeInfo?.title}
+                        {volume.volumeInfo?.language &&
+                            ` (${volume.volumeInfo?.language?.toLocaleLowerCase()})`}
+                    </TypographyH3>
+                    <Star className="text-primary fill-primary ml-3" />
+                    <b>{volume.volumeInfo?.averageRating ?? 0}</b>
                     <TypographyMuted>
-                        {a}
-                        {i + 1 !== (volume.volumeInfo?.authors.length ?? 0) &&
-                            ","}
+                        ({volume.volumeInfo?.ratingsCount ?? 0})
                     </TypographyMuted>
-                ))
-            :   <TypographyMuted className="italic">
-                    � Unknown author(s)
-                </TypographyMuted>
-            }
-            <div className="mt-2">{volume.volumeInfo.title}</div>
-        </>
+                </div>
+                {volume.volumeInfo?.subtitle && (
+                    <TypographyH4 className="text-secondary-foreground">
+                        {volume.volumeInfo?.subtitle}
+                    </TypographyH4>
+                )}
+                {volume.volumeInfo?.pageCount && (
+                    <TypographyMuted>
+                        ({volume.volumeInfo?.pageCount} pages)
+                    </TypographyMuted>
+                )}
+                <div className="mt-5">
+                    {volume.volumeInfo?.description ?? ""}
+                </div>
+            </div>
+        </div>
     );
 };
 

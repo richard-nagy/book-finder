@@ -54,7 +54,7 @@ const getBookByVolumeIdCore = async (
     return data;
 };
 
-export interface BookSearchContextType {
+export type BookSearchContextType = {
     /**
      * List of books.
      * If null, there are no results.
@@ -86,11 +86,11 @@ export interface BookSearchContextType {
     getBookByVolumeId: (volumeId: string) => Promise<Volume | null>;
     /** Clears books results and number of pages. */
     clearResults: () => void;
-}
+};
 
-interface BookSearchProviderProps {
+type BookSearchProviderProps = {
     children: ReactNode;
-}
+};
 
 export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
     const [books, setBooks] = useState<Volume[] | null>(null);

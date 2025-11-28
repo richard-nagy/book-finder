@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { type ElementType, type FC, useState } from "react";
 
-interface ToggleButtonProps {
+type ToggleButtonProps = {
     Icon1: ElementType;
     Icon2: ElementType;
     text: string;
     defaultSelected?: boolean;
     icon1Fill?: string;
     icon2Fill?: string;
-}
+};
 
 export const ToggleButton: FC<ToggleButtonProps> = (props) => {
     const {
