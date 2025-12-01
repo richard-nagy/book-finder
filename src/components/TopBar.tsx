@@ -1,27 +1,26 @@
-import EmptyView from "@/components/EmptyView";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { useBookSearch } from "@/context/BookSearchContext";
-import Book from "@/pages/book-search/Book";
-import DebouncedInput from "@/pages/book-search/DebouncedInput";
+import DebouncedInput from "@/pages/list/DebouncedInput";
 import { isStringEmpty } from "@/utils/common";
 import { SearchQuery } from "@/utils/types";
-import { Search } from "lucide-react";
+import { ArrowLeft, ArrowRight, HomeIcon, Search } from "lucide-react";
 import {
     useCallback,
     useEffect,
     useMemo,
     useState,
+    type FC,
     type KeyboardEvent,
+    type ReactElement,
 } from "react";
-import { useSearchParams } from "react-router-dom";
-import ListPagination from "./ListPagination";
+import { Link, useSearchParams } from "react-router-dom";
+import { SettingsDropDown } from "./SettingsDropdown";
+import { ThemeToggle } from "./ThemeToggle";
+import { Button } from "./ui/button";
 
-const List = () => {
-    const { books, maxNumberOfPages, bookFetchIsLoading, fetchBooks } =
-        useBookSearch();
-
+const TopBar: FC = (): ReactElement => {
     const [searchParams, setSearchParams] = useSearchParams();
+
+    const { fetchBooks } = useBookSearch();
 
     const searchQuery = searchParams.get(SearchQuery.q) ?? undefined;
 
@@ -61,12 +60,23 @@ const List = () => {
     }, [currentPageNumber, fetchBooks, searchQuery]);
 
     return (
-        <div className="flex flex-col gap-10">
-            <div className="left flex flex-row gap-2 justify-center align-middle absolute bg-primary-foreground z-1 w-[calc(100%-24px)]">
+        <div className="flex justify-between w-full sticky top-0 p-3">
+            <div className="flex gap-2">
+                <Button size="icon" disabled>
+                    <ArrowLeft />
+                </Button>
+                <Button size="icon" disabled>
+                    <ArrowRight />
+                </Button>
+            </div>
+            <div className="flex flex-row gap-2 justify-center align-middle">
+                <Button asChild size="icon">
+                    <Link to="/">
+                        <HomeIcon />
+                    </Link>
+                </Button>
                 <DebouncedInput
                     className="w-75"
-                    // debounceMs={250}
-                    // placeholder="Start typing to search for books..."
                     autoFocus={true}
                     defaultValue={inputValue}
                     onChange={setInputValue}
@@ -76,24 +86,12 @@ const List = () => {
                     <Search /> Search
                 </Button>
             </div>
-            {bookFetchIsLoading ?
-                <EmptyView
-                    description="Please wait while we are searching for books."
-                    title="Searching for Books..."
-                    icon={<Spinner />}
-                />
-            :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
-                    {books && books.length <= 0 ?
-                        <EmptyView
-                            description="No books were found."
-                            title="No results..."
-                        />
-                    :   books?.map((b) => <Book key={b.id} book={b} />)}
-                </div>
-            }
-            {maxNumberOfPages > 0 && <ListPagination />}
+            <div className="flex gap-2">
+                <ThemeToggle />
+                <SettingsDropDown />
+            </div>
         </div>
     );
 };
 
-export default List;
+export default TopBar;

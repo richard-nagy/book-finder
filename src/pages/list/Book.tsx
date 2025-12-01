@@ -35,7 +35,7 @@ const Book: FC<BookProps> = (props: BookProps): ReactElement => {
                     � Unknown author(s)
                 </TypographyMuted>
             }
-            <div className="mt-2">{book.volumeInfo.title}</div>
+            <div className="mt-1">{book.volumeInfo.title}</div>
         </div>
     );
 };

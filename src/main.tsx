@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import App from "./App";
 import "./index.css";
-import List from "./pages/book-search/List";
+import List from "./pages/list/List";
 import Book from "./pages/book/Book";
 import CustomErrorBoundary from "./pages/error/CustomErrorBoundary";
 import PageNotFound from "./pages/error/PageNotFound";

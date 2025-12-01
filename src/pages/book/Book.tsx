@@ -4,7 +4,7 @@ import { Spinner } from "@/components/ui/spinner";
 import {
     TypographyH2,
     TypographyH4,
-    TypographyMuted
+    TypographyMuted,
 } from "@/components/ui/typography";
 import { useBookSearch } from "@/context/BookSearchContext";
 import type { Volume } from "@/utils/types";
@@ -64,7 +64,7 @@ const Book: FC = (): ReactElement => {
                                 ","}
                         </TypographyH4>
                     ))
-                    : <TypographyH4 className="italic">
+                :   <TypographyH4 className="italic">
                         � Unknown author(s)
                     </TypographyH4>
                 }
@@ -99,7 +99,7 @@ const Book: FC = (): ReactElement => {
                 <div className="mt-5">
                     {volume.volumeInfo?.description ?
                         parse(volume.volumeInfo?.description)
-                        : ""}
+                    :   ""}
                 </div>
             </div>
         </div>
