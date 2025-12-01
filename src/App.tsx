@@ -1,6 +1,6 @@
 import { SettingsDropDown } from "@/components/SettingsDropdown";
-import { ThemeProvider } from "@/components/theme/ThemeProvider";
-import { ThemeToggle } from "@/components/theme/ThemeToggle";
+import { ThemeProvider } from "@/context/ThemeProvider";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
