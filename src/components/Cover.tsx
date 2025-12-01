@@ -14,11 +14,11 @@ type CoverProps = {
     className?: string;
 };
 const Cover: FC<CoverProps> = (props: CoverProps): ReactElement => {
-    const { src, alt, className, height = 75, width = 50 } = props;
+    const { src, alt, className, height, width } = props;
 
     return (
         <div
-            className={`bg-background w-${width} h-${height} flex justify-center items-center ${className ?? ""}`}
+            className={`bg-background w-${width ?? 50} h-${height ?? 75} flex justify-center items-center ${className ?? ""}`}
         >
             {src ?
                 <img

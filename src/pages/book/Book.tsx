@@ -51,7 +51,7 @@ const Book: FC = (): ReactElement => {
         <div className="flex justify-center gap-10">
             <Cover
                 alt={volume.id + "img"}
-                className="w-50 object-cover mb-2"
+                className="object-cover mb-2"
                 src={volume.volumeInfo?.imageLinks?.smallThumbnail}
             />
             <div className="max-w-200 flex-column">
