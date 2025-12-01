@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/context/ThemeProvider";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Outlet } from "react-router-dom";
-import TopBar from "./components/Topbar";
+import TopBar from "./components/TopBar";
 import { BookSearchProvider } from "./context/BookSearchProvider";
 
 const App = () => {
