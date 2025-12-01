@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/typography";
 import { useBookSearch } from "@/context/BookSearchContext";
 import type { Volume } from "@/utils/types";
+import parse from "html-react-parser";
 import { CircleQuestionMark, Star } from "lucide-react";
 import { useEffect, useState, type FC, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
@@ -92,7 +93,9 @@ const Book: FC = (): ReactElement => {
                     </TypographyMuted>
                 )}
                 <div className="mt-5">
-                    {volume.volumeInfo?.description ?? ""}
+                    {volume.volumeInfo?.description ?
+                        parse(volume.volumeInfo?.description)
+                    :   ""}
                 </div>
             </div>
         </div>
