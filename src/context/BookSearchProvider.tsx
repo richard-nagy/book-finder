@@ -60,6 +60,8 @@ export type BookSearchContextType = {
      * If null, there are no results.
      */
     booksByPage: Map<number, Volume[]> | null;
+    /** */
+    volume: Volume | null;
     /**
      * Number of available pages.
      * If null, there are no results.
@@ -80,12 +82,13 @@ export type BookSearchContextType = {
     ) => Promise<void>;
     /**
      * Fetches a specific book.
-     * @param volumeId
-     * @returns Returns the the data of the book. Returns null if there were no result.
+     * @param volumeId Id of the volume we want to fetch.
      */
-    getBookByVolumeId: (volumeId: string) => Promise<Volume | null>;
+    fetchVolume: (volumeId: string) => Promise<void>;
     /** Clears books results and number of pages. */
     clearResults: () => void;
+    /** Clears the volume. */
+    clearVolume: () => void;
 };
 
 type BookSearchProviderProps = {
@@ -107,12 +110,17 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
         Volume[]
     > | null>(null);
     const [maxNumberOfPages, setMaxNumberOfPages] = useState<number>(0);
+    const [volume, setVolume] = useState<Volume | null>(null);
     const [bookFetchIsPending, startBookFetch] = useTransition();
     const [volumeFetchIsPending, startVolumeFetch] = useTransition();
 
     const clearResults = useCallback(() => {
         setBooksByPage(null);
         setMaxNumberOfPages(0);
+    }, []);
+
+    const clearVolume = useCallback(() => {
+        setVolume(null);
     }, []);
 
     const fetchBooks = useCallback(
@@ -183,39 +191,36 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
         [booksByPage, clearResults, currentSearchQuery],
     );
 
-    const getBookByVolumeId = useCallback(
-        async (volumeId: string): Promise<Volume | null> => {
-            let result: Volume | null = null;
-
+    const fetchVolume = useCallback(async (volumeId: string): Promise<void> => {
+        startVolumeFetch(async () => {
             try {
-                await startVolumeFetch(async () => {
-                    if (!apiKey || !volumeId) {
-                        throw new Error("Missing API Key or Volume ID");
-                    }
+                if (!apiKey || !volumeId) {
+                    throw new Error("Missing API Key or Volume ID");
+                }
 
-                    result = await attemptFetch(
-                        () => getBookByVolumeIdCore(volumeId, apiKey),
-                        maxRetries,
-                        delayMs,
-                    );
-                });
+                const volume = await attemptFetch(
+                    () => getBookByVolumeIdCore(volumeId, apiKey),
+                    maxRetries,
+                    delayMs,
+                );
+
+                setVolume(volume);
             } catch (error) {
                 console.error("Error fetching book data:", error);
             }
-
-            return result;
-        },
-        [],
-    );
+        });
+    }, []);
 
     const value = {
         booksByPage,
         maxNumberOfPages,
         bookFetchIsPending,
         volumeFetchIsPending,
+        volume,
         fetchBooks,
-        getBookByVolumeId,
+        fetchVolume,
         clearResults,
+        clearVolume,
     };
 
     return (

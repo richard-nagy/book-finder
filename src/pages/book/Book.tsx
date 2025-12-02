@@ -7,25 +7,22 @@ import {
     TypographyMuted,
 } from "@/components/ui/typography";
 import { useBookSearch } from "@/context/BookSearchContext";
-import type { Volume } from "@/lib/types";
 import parse from "html-react-parser";
 import { CircleQuestionMark, Star } from "lucide-react";
-import { useEffect, useState, type FC, type ReactElement } from "react";
+import { useEffect, type FC, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 
 const Book: FC = (): ReactElement => {
     const { id } = useParams();
-    const { volumeFetchIsPending, getBookByVolumeId } = useBookSearch();
-
-    const [volume, setVolume] = useState<Volume | null>(null);
+    const { volumeFetchIsPending, volume, fetchVolume, clearVolume } = useBookSearch();
 
     useEffect(() => {
         if (id) {
-            getBookByVolumeId(id).then((v) => {
-                setVolume(v);
-            });
+            fetchVolume(id);
         }
-    }, [getBookByVolumeId, id]);
+
+        return clearVolume;
+    }, [clearVolume, fetchVolume, id]);
 
     if (volumeFetchIsPending) {
         return (
@@ -64,7 +61,7 @@ const Book: FC = (): ReactElement => {
                                 ","}
                         </TypographyH4>
                     ))
-                :   <TypographyH4 className="italic">
+                    : <TypographyH4 className="italic">
                         � Unknown author(s)
                     </TypographyH4>
                 }
@@ -99,7 +96,7 @@ const Book: FC = (): ReactElement => {
                 <div className="mt-5">
                     {volume.volumeInfo?.description ?
                         parse(volume.volumeInfo?.description)
-                    :   ""}
+                        : ""}
                 </div>
             </div>
         </div>
