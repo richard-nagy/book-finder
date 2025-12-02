@@ -28,7 +28,9 @@ const TopBar: FC = (): ReactElement => {
                 </>
                 : <span />
             }
-            <ThemeToggle />
+            <div className="w-38 flex justify-end">
+                <ThemeToggle />
+            </div>
         </div>
     );
 };

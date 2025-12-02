@@ -1,5 +1,5 @@
+import { BookFinder } from "@/lib/Icons";
 import { LogoSize } from "@/lib/types";
-import { BookIcon } from "lucide-react";
 import type { FC, ReactElement } from "react";
 import { TypographyH2, TypographyH3, TypographyH4 } from "./ui/typography";
 
@@ -21,7 +21,7 @@ const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
                     className={`flex items-center gap-1 ${className}`}
                     onClick={onClick}
                 >
-                    <BookIcon size="30" /> Book Finder
+                    <BookFinder size={30} /> Book Finder
                 </TypographyH2>
             );
         case LogoSize.medium:
@@ -30,7 +30,7 @@ const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
                     className={`flex items-center gap-1 ${className}`}
                     onClick={onClick}
                 >
-                    <BookIcon size="24" /> Book Finder
+                    <BookFinder size={24} /> Book Finder
                 </TypographyH3>
             );
         case LogoSize.small:
@@ -39,7 +39,7 @@ const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
                     className={`flex items-center gap-1 ${className}`}
                     onClick={onClick}
                 >
-                    <BookIcon size="20" /> Book Finder
+                    <BookFinder size={20} /> Book Finder
                 </TypographyH4>
             );
         default:
