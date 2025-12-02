@@ -42,15 +42,6 @@ const SearchField: FC<SearchInputProps> = ({
         [searchParams],
     );
 
-    useEffect(() => {
-        if (
-            location.pathname === `/${Page.homepage}` ||
-            location.pathname === `/${Page.search}`
-        ) {
-            fetchBooks(searchQuery, currentPageNumber);
-        }
-    }, [currentPageNumber, fetchBooks, searchQuery]);
-
     const isInputEmpty = useMemo(() => isStringEmpty(inputValue), [inputValue]);
 
     const navigateToSearchQuery = useCallback(() => {
@@ -68,20 +59,38 @@ const SearchField: FC<SearchInputProps> = ({
         [inputValue, isInputEmpty, navigateToSearchQuery],
     );
 
+    const onBackButtonClick = useCallback(() => {
+        if (location.pathname === `/${Page.search}`) {
+            navigate(Page.homepage);
+        } else if (location.pathname === `/${Page.book}`) {
+            navigate(-1);
+        }
+    }, [navigate]);
+
     useEffect(() => {
         setInputValue(searchQuery);
     }, [searchQuery]);
+
+
+    useEffect(() => {
+        if (
+            location.pathname === `/${Page.homepage}` ||
+            location.pathname === `/${Page.search}`
+        ) {
+            fetchBooks(searchQuery, currentPageNumber);
+        }
+    }, [currentPageNumber, fetchBooks, searchQuery]);
 
     const backButton =
         showBackButton ?
             <Button
                 size="icon"
                 disabled={!canGoBack}
-                onClick={() => navigate(-1)}
+                onClick={onBackButtonClick}
             >
                 <ArrowLeft />
             </Button>
-        :   null;
+            : null;
 
     return (
         <div className="flex flex-row gap-2 justify-center align-middle">
@@ -94,7 +103,7 @@ const SearchField: FC<SearchInputProps> = ({
                     navigateToSearchQuery={navigateToSearchQuery}
                     setInputValue={setInputValue}
                 />
-            :   <>
+                : <>
                     <Input
                         className="w-75"
                         type="text"
