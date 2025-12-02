@@ -51,7 +51,6 @@ export type Page = (typeof Page)[keyof typeof Page];
 export const LogoSize = {
     small: "small",
     medium: "medium",
-    big: "big",
     large: "large",
 } as const;
 

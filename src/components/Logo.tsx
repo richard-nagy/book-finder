@@ -12,13 +12,15 @@ type LogoProps = {
     onClick?: () => void;
 };
 const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
-    const { size, className, onClick } = props;
+    const { size, className: classNameProp, onClick } = props;
+
+    const className = `flex items-center gap-1 ${classNameProp}`;
 
     switch (size) {
-        case LogoSize.big:
+        case LogoSize.large:
             return (
                 <TypographyH2
-                    className={`flex items-center gap-1 ${className}`}
+                    className={className}
                     onClick={onClick}
                 >
                     <BookFinder size={30} /> Book Finder
@@ -27,7 +29,7 @@ const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
         case LogoSize.medium:
             return (
                 <TypographyH3
-                    className={`flex items-center gap-1 ${className}`}
+                    className={className}
                     onClick={onClick}
                 >
                     <BookFinder size={24} /> Book Finder
@@ -36,7 +38,7 @@ const Logo: FC<LogoProps> = (props: LogoProps): ReactElement | null => {
         case LogoSize.small:
             return (
                 <TypographyH4
-                    className={`flex items-center gap-1 ${className}`}
+                    className={className}
                     onClick={onClick}
                 >
                     <BookFinder size={20} /> Book Finder

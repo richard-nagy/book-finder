@@ -1,13 +1,13 @@
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "react";
 
-function TypographyH2({
+function TypographyH1({
     className,
     children,
     ...props
 }: HTMLAttributes<HTMLHeadingElement>) {
     return (
-        <h3
+        <h1
             className={cn(
                 "scroll-m-20 pb-1 text-3xl font-semibold tracking-tight first:mt-0",
                 className,
@@ -15,7 +15,25 @@ function TypographyH2({
             {...props}
         >
             {children}
-        </h3>
+        </h1>
+    );
+}
+
+function TypographyH2({
+    className,
+    children,
+    ...props
+}: HTMLAttributes<HTMLHeadingElement>) {
+    return (
+        <h2
+            className={cn(
+                "scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0",
+                className,
+            )}
+            {...props}
+        >
+            {children}
+        </h2>
     );
 }
 
@@ -91,4 +109,5 @@ export {
     TypographyH4,
     TypographyH3,
     TypographyH2,
+    TypographyH1,
 };
