@@ -61,7 +61,7 @@ export type BookSearchContextType = {
      */
     booksByPage: Map<number, Volume[]> | null;
     /** */
-    volume: Volume | null;
+    volumeMap: Map<string, Volume> | null;
     /**
      * Number of available pages.
      * If null, there are no results.
@@ -87,8 +87,6 @@ export type BookSearchContextType = {
     fetchVolume: (volumeId: string) => Promise<void>;
     /** Clears books results and number of pages. */
     clearResults: () => void;
-    /** Clears the volume. */
-    clearVolume: () => void;
 };
 
 type BookSearchProviderProps = {
@@ -96,11 +94,7 @@ type BookSearchProviderProps = {
 };
 
 // todo: change this name to BookProvider
-// done: of successful book fetch, stash the search query as well, if we step back from the book result instead of reloading the results just give us the results on an instant
-// done: if the search query didn't changed and the user steps back in the pagination, don't re-fetch the results just give back the already existing one
-// done: on search query change, remove the stashed results
-// todo: save all the results with query and page number in the current session
-// todo: add a clear stashed results button (somewhere)
+// todo: also save the opened volumes into a map based on
 export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
     const [currentSearchQuery, setCurrentSearchQuery] = useState<string | null>(
         null,
@@ -110,7 +104,9 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
         Volume[]
     > | null>(null);
     const [maxNumberOfPages, setMaxNumberOfPages] = useState<number>(0);
-    const [volume, setVolume] = useState<Volume | null>(null);
+    const [volumeMap, setVolumeMap] = useState<Map<string, Volume> | null>(
+        null,
+    );
     const [bookFetchIsPending, startBookFetch] = useTransition();
     const [volumeFetchIsPending, startVolumeFetch] = useTransition();
 
@@ -119,34 +115,33 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
         setMaxNumberOfPages(0);
     }, []);
 
-    const clearVolume = useCallback(() => {
-        setVolume(null);
-    }, []);
-
     const fetchBooks = useCallback(
         async (searchQuery: string | null, pageNumber = 0): Promise<void> => {
-            const sameSearchQuery = currentSearchQuery !== searchQuery;
-
-            try {
-                if (!apiKey) {
-                    throw new Error("Missing API Key");
-                }
-
-                if (!searchQuery || isStringEmpty(searchQuery)) {
-                    clearResults();
-                    return;
-                }
-
-                // If it's the same search query and we already got the books for the page, don't repeat the fetch.
-                if (
+            startBookFetch(async () => {
+                const sameSearchQuery =
                     currentSearchQuery?.toLocaleLowerCase() ===
-                        searchQuery?.toLocaleLowerCase() &&
-                    booksByPage?.has(pageNumber)
-                ) {
-                    return;
-                }
+                    searchQuery?.toLocaleLowerCase();
 
-                startBookFetch(async () => {
+                try {
+                    if (!apiKey) {
+                        throw new Error("Missing API Key");
+                    }
+
+                    if (!searchQuery || isStringEmpty(searchQuery)) {
+                        clearResults();
+                        return;
+                    }
+
+                    console.log(
+                        "refetch?",
+                        sameSearchQuery,
+                        booksByPage?.has(pageNumber),
+                    );
+                    // If it's the same search query and we already got the books for the page, don't repeat the fetch.
+                    if (sameSearchQuery && booksByPage?.has(pageNumber)) {
+                        return;
+                    }
+
                     const data = await attemptFetch(
                         () => fetchBooksCore(searchQuery, pageNumber, apiKey),
                         maxRetries,
@@ -170,57 +165,72 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                             return newBooks;
                         });
                     }
-                });
-            } catch (error) {
-                let errorMessage = "An unknown error occurred.";
-                if (error instanceof Error) {
-                    errorMessage = error.message;
-                }
+                } catch (error) {
+                    let errorMessage = "An unknown error occurred.";
+                    if (error instanceof Error) {
+                        errorMessage = error.message;
+                    }
 
-                clearResults();
-                console.error(error);
-                toast.error("Search Failed", {
-                    description: `Error details: ${errorMessage}`,
-                });
-            } finally {
-                if (sameSearchQuery) {
-                    setCurrentSearchQuery(searchQuery);
+                    clearResults();
+                    console.error(error);
+                    toast.error("Search Failed", {
+                        description: `Error details: ${errorMessage}`,
+                    });
+                } finally {
+                    if (!sameSearchQuery) {
+                        setCurrentSearchQuery(searchQuery);
+                        // On query change clear the saved volumes
+                        console.log("what");
+                        setVolumeMap(null);
+                    }
                 }
-            }
+            });
         },
         [booksByPage, clearResults, currentSearchQuery],
     );
 
-    const fetchVolume = useCallback(async (volumeId: string): Promise<void> => {
-        startVolumeFetch(async () => {
-            try {
-                if (!apiKey || !volumeId) {
-                    throw new Error("Missing API Key or Volume ID");
+    const fetchVolume = useCallback(
+        async (volumeId: string): Promise<void> => {
+            startVolumeFetch(async () => {
+                if (volumeMap?.has(volumeId)) {
+                    return;
                 }
 
-                const volume = await attemptFetch(
-                    () => getBookByVolumeIdCore(volumeId, apiKey),
-                    maxRetries,
-                    delayMs,
-                );
+                try {
+                    if (!apiKey) {
+                        throw new Error("Missing API Key or Volume ID");
+                    }
 
-                setVolume(volume);
-            } catch (error) {
-                console.error("Error fetching book data:", error);
-            }
-        });
-    }, []);
+                    const volume = await attemptFetch(
+                        () => getBookByVolumeIdCore(volumeId, apiKey),
+                        maxRetries,
+                        delayMs,
+                    );
+
+                    if (volume) {
+                        setVolumeMap((ovm) => {
+                            const newVolumeMap = new Map([...(ovm ?? [])]);
+                            newVolumeMap.set(volumeId, volume);
+                            return newVolumeMap;
+                        });
+                    }
+                } catch (error) {
+                    console.error("Error fetching book data:", error);
+                }
+            });
+        },
+        [volumeMap],
+    );
 
     const value = {
         booksByPage,
         maxNumberOfPages,
         bookFetchIsPending,
         volumeFetchIsPending,
-        volume,
+        volumeMap,
         fetchBooks,
         fetchVolume,
         clearResults,
-        clearVolume,
     };
 
     return (

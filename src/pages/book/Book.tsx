@@ -9,20 +9,23 @@ import {
 import { useBookSearch } from "@/context/BookSearchContext";
 import parse from "html-react-parser";
 import { CircleQuestionMark, Star } from "lucide-react";
-import { useEffect, type FC, type ReactElement } from "react";
+import { useEffect, useMemo, type FC, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 
 const Book: FC = (): ReactElement => {
     const { id } = useParams();
-    const { volumeFetchIsPending, volume, fetchVolume, clearVolume } = useBookSearch();
+    const { volumeFetchIsPending, volumeMap, fetchVolume } = useBookSearch();
+
+    const volume = useMemo(
+        () => (id ? (volumeMap?.get(id) ?? null) : null),
+        [id, volumeMap],
+    );
 
     useEffect(() => {
-        if (id) {
+        if (id && !volume) {
             fetchVolume(id);
         }
-
-        return clearVolume;
-    }, [clearVolume, fetchVolume, id]);
+    }, [fetchVolume, id, volume]);
 
     if (volumeFetchIsPending) {
         return (
@@ -61,7 +64,7 @@ const Book: FC = (): ReactElement => {
                                 ","}
                         </TypographyH4>
                     ))
-                    : <TypographyH4 className="italic">
+                :   <TypographyH4 className="italic">
                         � Unknown author(s)
                     </TypographyH4>
                 }
@@ -96,7 +99,7 @@ const Book: FC = (): ReactElement => {
                 <div className="mt-5">
                     {volume.volumeInfo?.description ?
                         parse(volume.volumeInfo?.description)
-                        : ""}
+                    :   ""}
                 </div>
             </div>
         </div>
