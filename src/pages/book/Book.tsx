@@ -61,7 +61,10 @@ const Book: FC = (): ReactElement => {
             <div className="max-w-200 flex-column shrink">
                 {(volume.volumeInfo?.authors?.length ?? 0) > 0 ?
                     volume.volumeInfo?.authors?.map((a, i) => (
-                        <TypographyH4 className="text-secondary-foreground">
+                        <TypographyH4
+                            className="text-secondary-foreground"
+                            key={`author-${i}`}
+                        >
                             {a}
                             {i + 1 !==
                                 (volume?.volumeInfo?.authors?.length ?? 0) &&

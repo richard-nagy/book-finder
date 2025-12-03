@@ -1,4 +1,3 @@
-import { useBookSearch } from "@/context/BookSearchContext";
 import {
     Pagination,
     PaginationButton,
@@ -8,6 +7,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from "@/components/ui/pagination";
+import { useBookSearch } from "@/context/BookSearchContext";
 import { SearchQuery } from "@/lib/types";
 import { useCallback, useMemo, type FC, type ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -38,7 +38,7 @@ const ListPagination: FC = (): ReactElement => {
         (number: number) =>
             number <= 0 || number > maxNumberOfPages ?
                 null
-            :   <PaginationItem>
+            :   <PaginationItem key={number}>
                     <PaginationButton
                         onClick={() => changePageNumber(number)}
                         isActive={currentPageNumber === number}
@@ -61,6 +61,7 @@ const ListPagination: FC = (): ReactElement => {
     const pageNationItemsToRender = useMemo(() => {
         return [
             <PaginationPrevious
+                key="previous"
                 disabled={currentPageNumber <= 1}
                 onClick={() => changePageNumber(currentPageNumber - 1)}
             />,
@@ -74,6 +75,7 @@ const ListPagination: FC = (): ReactElement => {
                 paginationEllipsis
             :   null,
             <PaginationNext
+                key="next"
                 disabled={currentPageNumber >= maxNumberOfPages}
                 onClick={() => changePageNumber(currentPageNumber + 1)}
             />,

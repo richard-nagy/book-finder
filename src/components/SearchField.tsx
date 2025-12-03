@@ -73,7 +73,6 @@ const SearchField: FC<SearchInputProps> = ({
     }, [navigate, searchQuery]);
 
     useEffect(() => {
-        console.log(searchQuery);
         setInputValue(searchQuery);
     }, [searchQuery]);
 

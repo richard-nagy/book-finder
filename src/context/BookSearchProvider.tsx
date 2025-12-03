@@ -133,11 +133,6 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                         return;
                     }
 
-                    console.log(
-                        "refetch?",
-                        sameSearchQuery,
-                        booksByPage?.has(pageNumber),
-                    );
                     // If it's the same search query and we already got the books for the page, don't repeat the fetch.
                     if (sameSearchQuery && booksByPage?.has(pageNumber)) {
                         return;
@@ -181,7 +176,6 @@ export const BookSearchProvider = ({ children }: BookSearchProviderProps) => {
                     if (!sameSearchQuery) {
                         setCurrentSearchQuery(searchQuery);
                         // On query change clear the saved volumes
-                        console.log("what");
                         setVolumeMap(null);
                     }
                 }

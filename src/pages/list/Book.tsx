@@ -28,7 +28,7 @@ const Book: FC<BookProps> = ({ book }): ReactElement => {
             />
             {(book.volumeInfo?.authors?.length ?? 0) > 0 ?
                 book.volumeInfo?.authors?.map((a, i) => (
-                    <TypographyMuted>
+                    <TypographyMuted key={`author-${i}`}>
                         {a}
                         {i + 1 !== (book.volumeInfo?.authors?.length ?? 0) &&
                             ","}
