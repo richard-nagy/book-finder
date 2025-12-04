@@ -1,25 +1,62 @@
 import Cover from "@/components/Cover";
 import EmptyView from "@/components/EmptyView";
 import { Spinner } from "@/components/ui/spinner";
-import {
-    TypographyH2,
-    TypographyH4,
-    TypographyMuted,
-    TypographyP,
-} from "@/components/ui/typography";
+import { Typography } from "@/components/ui/typography";
 import { useBook } from "@/context/BookContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import type { Volume } from "@/lib/types";
 import parse from "html-react-parser";
 import { CircleQuestionMark, Star } from "lucide-react";
 import { useEffect, useMemo, type FC, type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 
+const AuthorList: FC<{ authors: string[] | undefined }> = ({ authors }) => {
+    if (!authors || authors.length === 0) {
+        return (
+            <Typography variant="h4" className="italic">
+                Unknown author(s)
+            </Typography>
+        );
+    }
+
+    return (
+        <>
+            {authors.map((a, i) => (
+                <Typography
+                    variant="h4"
+                    className="text-secondary-foreground"
+                    key={`author-${i}`}
+                >
+                    {a}
+                    {i + 1 !== authors.length && ","}
+                </Typography>
+            ))}
+        </>
+    );
+};
+
+const DescriptionAndPublisher: FC<{ volumeInfo: Volume["volumeInfo"] }> = ({
+    volumeInfo,
+}) => (
+    <div className="flex flex-col gap-4">
+        {volumeInfo?.description && (
+            <Typography variant="p" className="mt-6">
+                {parse(volumeInfo.description)}
+            </Typography>
+        )}
+        <Typography variant="muted">
+            {volumeInfo?.publisher}{" "}
+            {volumeInfo?.publishedDate && `(${volumeInfo.publishedDate})`}
+        </Typography>
+    </div>
+);
+
 const Book: FC = (): ReactElement => {
-    const { id } = useParams();
+    const { id } = useParams<{ id: string }>();
     const { volumeFetchIsPending, volumeMap, fetchVolume } = useBook();
     const isMobile = useIsMobile();
 
-    const volume = useMemo(
+    const volume: Volume | null = useMemo(
         () => (id ? (volumeMap?.get(id) ?? null) : null),
         [id, volumeMap],
     );
@@ -40,7 +77,7 @@ const Book: FC = (): ReactElement => {
         );
     }
 
-    if (volume === null) {
+    if (!volume) {
         return (
             <EmptyView
                 icon={<CircleQuestionMark />}
@@ -50,72 +87,72 @@ const Book: FC = (): ReactElement => {
         );
     }
 
+    const volumeInfo = volume.volumeInfo;
+
     return (
-        <div
-            className={`flex items-start justify-center gap-10 ${isMobile && "flex-col"}`}
-        >
-            <Cover
-                alt={volume.id + "img"}
-                className="object-cover mb-2"
-                src={volume.volumeInfo?.imageLinks?.smallThumbnail}
-            />
-            <div className="max-w-200 flex-column shrink">
-                {(volume.volumeInfo?.authors?.length ?? 0) > 0 ?
-                    volume.volumeInfo?.authors?.map((a, i) => (
-                        <TypographyH4
+        <>
+            <div className={`flex items-start justify-center gap-10`}>
+                <Cover
+                    alt={volume.id + "img"}
+                    className="object-cover mb-2"
+                    src={volumeInfo?.imageLinks?.smallThumbnail}
+                />
+
+                {/* Fixed incorrect class: max-w-200 is custom, flex-column is non-standard */}
+                <div className="max-w-xl flex flex-col shrink">
+                    <AuthorList authors={volumeInfo?.authors} />
+
+                    <div className="gap-2 mt-1 flex items-start">
+                        <Typography variant="h2">
+                            {volumeInfo?.title}
+                            {volumeInfo?.language && (
+                                <span className="text-muted-foreground">
+                                    {" "}
+                                    ({volumeInfo.language.toLocaleLowerCase()})
+                                </span>
+                            )}
+                        </Typography>
+
+                        {/* Rating and Count */}
+                        <div className="flex gap-2 items-center">
+                            <Star
+                                className="text-primary fill-primary ml-3"
+                                size={isMobile ? "20" : "24"}
+                            />
+                            <b>{volumeInfo?.averageRating ?? 0}</b>
+                            <Typography variant="muted">
+                                ({volumeInfo?.ratingsCount ?? 0})
+                            </Typography>
+                        </div>
+                    </div>
+
+                    {/* Subtitle */}
+                    {volumeInfo?.subtitle && (
+                        <Typography
+                            variant="h4"
                             className="text-secondary-foreground"
-                            key={`author-${i}`}
                         >
-                            {a}
-                            {i + 1 !==
-                                (volume?.volumeInfo?.authors?.length ?? 0) &&
-                                ","}
-                        </TypographyH4>
-                    ))
-                    : <TypographyH4 className="italic">
-                        � Unknown author(s)
-                    </TypographyH4>
-                }
-                <div className="gap-2 mt-1 flex items-center">
-                    <TypographyH2>
-                        {volume.volumeInfo?.title}
-                        {volume.volumeInfo?.language && (
-                            <span className="text-muted-foreground">
-                                {" "}
-                                (
-                                {volume.volumeInfo?.language?.toLocaleLowerCase()}
-                                )
-                            </span>
-                        )}
-                    </TypographyH2>
-                    <Star className="text-primary fill-primary ml-3" />
-                    <b>{volume.volumeInfo?.averageRating ?? 0}</b>
-                    <TypographyMuted>
-                        ({volume.volumeInfo?.ratingsCount ?? 0})
-                    </TypographyMuted>
+                            {volumeInfo.subtitle}
+                        </Typography>
+                    )}
+
+                    {/* Page Count */}
+                    {volumeInfo?.pageCount && (
+                        <Typography variant="muted">
+                            ({volumeInfo.pageCount} pages)
+                        </Typography>
+                    )}
+
+                    {/* Description and Publisher for Desktop */}
+                    {!isMobile && (
+                        <DescriptionAndPublisher volumeInfo={volumeInfo} />
+                    )}
                 </div>
-                {volume.volumeInfo?.subtitle && (
-                    <TypographyH4 className="text-secondary-foreground">
-                        {volume.volumeInfo?.subtitle}
-                    </TypographyH4>
-                )}
-                {volume.volumeInfo?.pageCount && (
-                    <TypographyMuted>
-                        ({volume.volumeInfo?.pageCount} pages)
-                    </TypographyMuted>
-                )}
-                <TypographyP className="mt-5">
-                    {volume.volumeInfo?.description ?
-                        parse(volume.volumeInfo?.description)
-                        : ""}
-                </TypographyP>
-                <TypographyMuted className="mt-5">
-                    {volume.volumeInfo?.publisher}{" "}
-                    {volume.volumeInfo?.publishedDate ??
-                        `(${volume.volumeInfo?.publishedDate})`}
-                </TypographyMuted>
             </div>
-        </div>
+
+            {/* Description and Publisher for Mobile */}
+            {isMobile && <DescriptionAndPublisher volumeInfo={volumeInfo} />}
+        </>
     );
 };
 
