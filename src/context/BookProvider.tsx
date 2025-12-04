@@ -146,9 +146,7 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                     if (data.totalItems > 0) {
                         const totalPages = data.totalItems;
 
-                        setMaxNumberOfPages(
-                            Math.floor(totalPages / maxResults),
-                        );
+                        setMaxNumberOfPages(Math.ceil(totalPages / maxResults));
                     }
 
                     if (data.items && (data.items?.length ?? 0) > 0) {

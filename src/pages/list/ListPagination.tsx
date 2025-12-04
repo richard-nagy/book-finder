@@ -12,19 +12,15 @@ import { SearchQuery } from "@/lib/types";
 import { useCallback, useMemo, type FC, type ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
 
-const paginationEllipsis = (
-    <PaginationItem>
-        <PaginationEllipsis />
-    </PaginationItem>
-);
+// Defines how many pages should appear directly around the current page
+const pageWindow = 1;
 
-const ListPagination: FC = (): ReactElement => {
+const ListPagination: FC = (): ReactElement | null => {
     const { maxNumberOfPages } = useBook();
-
     const [searchParams, setSearchParams] = useSearchParams();
 
     const currentPageNumber = useMemo(
-        () => parseInt(searchParams.get(SearchQuery.page) ?? "0"),
+        () => parseInt(searchParams.get(SearchQuery.page) ?? "1"),
         [searchParams],
     );
 
@@ -41,43 +37,83 @@ const ListPagination: FC = (): ReactElement => {
     );
 
     const paginationItem = useCallback(
-        (number: number) =>
-            number <= 0 || number > maxNumberOfPages ?
-                null
-            :   <PaginationItem key={number}>
-                    <PaginationButton
-                        onClick={() => changePageNumber(number)}
-                        isActive={currentPageNumber === number}
-                    >
-                        {number}
-                    </PaginationButton>
-                </PaginationItem>,
+        (number: number) => (
+            <PaginationItem key={number}>
+                <PaginationButton
+                    onClick={() => changePageNumber(number)}
+                    isActive={currentPageNumber === number}
+                    disabled={number < 1 || number > maxNumberOfPages}
+                >
+                    {number}
+                </PaginationButton>
+            </PaginationItem>
+        ),
         [changePageNumber, maxNumberOfPages, currentPageNumber],
     );
 
     const pageNationItemsToRender = useMemo(() => {
-        return [
+        const items: ReactElement[] = [];
+
+        // Previous Button
+        items.push(
             <PaginationPrevious
                 key="previous"
                 disabled={currentPageNumber <= 1}
                 onClick={() => changePageNumber(currentPageNumber - 1)}
             />,
-            currentPageNumber - 2 > 1 ? paginationEllipsis : null,
-            paginationItem(currentPageNumber - 2),
-            paginationItem(currentPageNumber - 1),
-            paginationItem(currentPageNumber),
-            paginationItem(currentPageNumber + 1),
-            paginationItem(currentPageNumber + 2),
-            currentPageNumber + 2 < maxNumberOfPages ?
-                paginationEllipsis
-            :   null,
+        );
+
+        // Helper to add an ellipsis
+        const addEllipsis = (key: string) => (
+            <PaginationItem key={key}>
+                <PaginationEllipsis />
+            </PaginationItem>
+        );
+
+        // Add the first page
+        items.push(paginationItem(1));
+
+        // Add start ellipsis if current page is far from 1
+        if (currentPageNumber > 2 + pageWindow) {
+            items.push(addEllipsis("ellipsis-start"));
+        }
+
+        // Add pages around the current page
+        const startPage = Math.max(2, currentPageNumber - pageWindow);
+        const endPage = Math.min(
+            maxNumberOfPages,
+            currentPageNumber + pageWindow,
+        );
+
+        for (let i = startPage; i <= endPage; i++) {
+            items.push(paginationItem(i));
+        }
+
+        // Add ellipsis if current page is far from the last page
+        if (currentPageNumber < maxNumberOfPages - 1 - pageWindow) {
+            items.push(addEllipsis("ellipsis-end"));
+        }
+
+        // if (currentPageNumber === maxNumberOfPages) {
+        //     items.push(paginationItem(currentPageNumber));
+        // }
+
+        // Next Button
+        items.push(
             <PaginationNext
                 key="next"
                 disabled={currentPageNumber >= maxNumberOfPages}
                 onClick={() => changePageNumber(currentPageNumber + 1)}
             />,
-        ];
+        );
+
+        return items;
     }, [changePageNumber, maxNumberOfPages, currentPageNumber, paginationItem]);
+
+    // Max number of pages must be 2 or more to show pagination items
+    if (maxNumberOfPages <= 1) {
+        return null;
+    }
 
     return (
         <Pagination className="my-3">
