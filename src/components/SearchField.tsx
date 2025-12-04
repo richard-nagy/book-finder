@@ -19,10 +19,14 @@ import { Input } from "./ui/input";
 const firstPageNumber = "1";
 
 type SearchInputProps = {
+    /** If true, show a back button. */
     showBackButton?: boolean;
+    /** If true, show a button instead that opens a search dialog. */
     isDialogViewAllowed?: boolean;
+    /** Optional additional CSS class names to apply to the container element. */
     className?: string;
 };
+
 const SearchField: FC<SearchInputProps> = ({
     showBackButton,
     isDialogViewAllowed,

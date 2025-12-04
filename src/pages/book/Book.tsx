@@ -92,17 +92,19 @@ const Book: FC = (): ReactElement => {
     return (
         <>
             <div className={`flex items-start justify-center gap-10`}>
+                {/* Cover */}
                 <Cover
                     alt={volume.id + "img"}
                     className="object-cover mb-2"
                     src={volumeInfo?.imageLinks?.smallThumbnail}
                 />
 
-                {/* Fixed incorrect class: max-w-200 is custom, flex-column is non-standard */}
                 <div className="max-w-xl flex flex-col shrink">
+                    {/* Authors */}
                     <AuthorList authors={volumeInfo?.authors} />
 
                     <div className="gap-2 mt-1 flex items-start">
+                        {/* Title */}
                         <Typography variant="h2">
                             {volumeInfo?.title}
                             {volumeInfo?.language && (

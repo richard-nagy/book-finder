@@ -94,10 +94,6 @@ const ListPagination: FC = (): ReactElement | null => {
             items.push(addEllipsis("ellipsis-end"));
         }
 
-        // if (currentPageNumber === maxNumberOfPages) {
-        //     items.push(paginationItem(currentPageNumber));
-        // }
-
         // Next Button
         items.push(
             <PaginationNext

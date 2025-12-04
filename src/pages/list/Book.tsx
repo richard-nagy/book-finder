@@ -5,6 +5,7 @@ import { type FC, type ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 
 type BookProps = {
+    /** The data object containing all volume information for a single book. */
     book: Volume;
 };
 

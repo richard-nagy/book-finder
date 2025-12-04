@@ -3,6 +3,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useBook } from "@/context/BookContext";
 import { SearchQuery } from "@/lib/types";
 import Book from "@/pages/list/Book";
+import { Frown } from "lucide-react";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import ListPagination from "./ListPagination";
@@ -26,15 +27,20 @@ const List = () => {
         <div className="flex flex-col gap-10">
             {bookFetchIsPending ?
                 <EmptyView
-                    description="Please wait while we are searching for books."
-                    title="Searching for Books..."
+                    title="Loading Books.."
+                    description="Fetching data. Please wait."
                     icon={<Spinner />}
                 />
             :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
-                    {booksOfCurrentPage && booksOfCurrentPage.length <= 0 ?
+                    {(
+                        (booksOfCurrentPage &&
+                            booksOfCurrentPage.length <= 0) ||
+                        !booksOfCurrentPage
+                    ) ?
                         <EmptyView
-                            description="No books were found."
-                            title="No results..."
+                            icon={<Frown />}
+                            description="Your search returned no results."
+                            title="No Books Found"
                         />
                     :   booksOfCurrentPage?.map((b) => (
                             <Book key={b.id} book={b} />

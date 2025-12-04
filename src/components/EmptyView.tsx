@@ -8,10 +8,14 @@ import {
 } from "./ui/empty";
 
 type EmptyViewProps = {
+    /** The main heading or title displayed in the empty view. */
     title: string;
+    /** A detailed explanation or context accompanying the title. */
     description: string;
+    /** Optional React element (like an SVG icon) to visually represent the state. */
     icon?: JSX.Element;
 };
+
 const EmptyView: FC<EmptyViewProps> = ({
     icon,
     title,

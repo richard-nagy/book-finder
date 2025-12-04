@@ -19,12 +19,26 @@ import {
 import { Input } from "./ui/input";
 
 type SearchFieldDialogProps = {
+    /** Value for the text input. */
     inputValue: string;
+    /** If true, the search field is currently empty. */
     isInputEmpty: boolean;
+    /**
+     * Handler for keydown events on the input field, typically used to trigger search on "Enter".
+     *
+     * @param {KeyboardEvent<HTMLInputElement>} event - The keyboard event object.
+     */
     handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
+    /** Function to execute the search navigation based on the current input value. */
     navigateToSearchQuery: () => void;
+    /**
+     * Setter function to update the state of the input value.
+     *
+     * @param {string} value - The new string value to set for the input field.
+     */
     setInputValue: (value: string) => void;
 };
+
 const SearchFieldDialog: FC<SearchFieldDialogProps> = ({
     isInputEmpty,
     inputValue,

@@ -9,7 +9,7 @@ const Homepage: FC = (): ReactElement => {
         <div className="w-full h-full flex flex-col items-center justify-center">
             <Logo size={LogoSize.large} />
             <Typography variant="muted" disableMobileView className="mb-4">
-                Find books and view their details.
+                Find books and explore their summaries..
             </Typography>
             <SearchField className="" />
         </div>

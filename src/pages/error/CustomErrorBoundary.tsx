@@ -1,10 +1,13 @@
-import { useBook } from "@/context/BookContext";
 import { Button } from "@/components/ui/button";
+import { useBook } from "@/context/BookContext";
+import { Page } from "@/lib/types";
+import { HomeIcon } from "lucide-react";
 import type { FC } from "react";
-import { Link, useRouteError } from "react-router-dom";
+import { useNavigate, useRouteError } from "react-router-dom";
 
 const CustomErrorBoundary: FC = () => {
     const { clearResults } = useBook();
+    const navigate = useNavigate();
     const error = useRouteError();
     const isError = error instanceof Error;
 
@@ -27,8 +30,8 @@ const CustomErrorBoundary: FC = () => {
                     <p className="whitespace-pre-wrap">{error.message}</p>
                 </div>
             )}
-            <Button asChild className="mt-6">
-                <Link to="/">Go to Home Page</Link>
+            <Button asChild onClick={() => navigate(Page.homepage)}>
+                <HomeIcon /> Go Home
             </Button>
         </div>
     );

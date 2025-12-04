@@ -16,6 +16,7 @@ type LogoProps = {
     /** Optional on click method for the logo. */
     onClick?: () => void;
 };
+
 const Logo: FC<LogoProps> = ({
     size,
     className: classNameProp,

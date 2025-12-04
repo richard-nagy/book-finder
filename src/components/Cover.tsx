@@ -2,17 +2,14 @@ import { CircleQuestionMark } from "lucide-react";
 import type { FC, ReactElement } from "react";
 
 type CoverProps = {
-    /** Alternate text for an image. */
+    /** The alternative text for the image, essential for accessibility. */
     alt: string;
-    /** Width in rem (1 will equal to 4 pixels). */
-    width?: number;
-    /** Height in rem (1 will equal to 4 pixels). */
-    height?: number;
-    /** Source of the image. */
+    /** Optional source URL (src) of the book cover image. */
     src?: string;
-    /** ClassName for the Cover Container element. */
+    /** Optional additional CSS class names to apply to the container element. */
     className?: string;
 };
+
 const Cover: FC<CoverProps> = ({ src, alt, className }): ReactElement => {
     return (
         <div
