@@ -12,13 +12,16 @@ const Book: FC<BookProps> = ({ book }): ReactElement => {
     const navigate = useNavigate();
     const isMobile = useIsMobile();
 
+    const width = isMobile ? 30 : 40;
+    const height = isMobile ? 45 : 60;
+
     const navigateToBook = () => {
         navigate(`/book/${book.id}`, { relative: "route" });
     };
 
     return (
         <div
-            className={`w-${isMobile ? 40 : 60} cursor-pointer`}
+            className={`${"w-" + width} ${"h-" + height} cursor-pointer outline-1`}
             onClick={navigateToBook}
         >
             <Cover

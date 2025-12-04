@@ -26,16 +26,17 @@ const Cover: FC<CoverProps> = ({
     const calculatedWidth =
         width !== undefined ? width
         : isMobile ? 30
-        : 50;
+        : 40;
 
     const calculatedHeight =
         height !== undefined ? height
         : isMobile ? 45
-        : 75;
+        : 60;
 
     return (
         <div
-            className={`bg-background w-${calculatedWidth} h-${calculatedHeight} flex justify-center items-center shrink-0 ${className ?? ""}`}
+            style={{}}
+            className={`${"w-" + calculatedWidth} ${"h-" + calculatedHeight} bg-background flex justify-center items-center shrink-0 ${className ?? ""}`}
         >
             {src ?
                 <img

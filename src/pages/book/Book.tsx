@@ -5,6 +5,7 @@ import {
     TypographyH2,
     TypographyH4,
     TypographyMuted,
+    TypographyP,
 } from "@/components/ui/typography";
 import { useBook } from "@/context/BookContext";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -71,7 +72,7 @@ const Book: FC = (): ReactElement => {
                                 ","}
                         </TypographyH4>
                     ))
-                :   <TypographyH4 className="italic">
+                    : <TypographyH4 className="italic">
                         � Unknown author(s)
                     </TypographyH4>
                 }
@@ -103,11 +104,16 @@ const Book: FC = (): ReactElement => {
                         ({volume.volumeInfo?.pageCount} pages)
                     </TypographyMuted>
                 )}
-                <div className="mt-5">
+                <TypographyP className="mt-5">
                     {volume.volumeInfo?.description ?
                         parse(volume.volumeInfo?.description)
-                    :   ""}
-                </div>
+                        : ""}
+                </TypographyP>
+                <TypographyMuted className="mt-5">
+                    {volume.volumeInfo?.publisher}{" "}
+                    {volume.volumeInfo?.publishedDate ??
+                        `(${volume.volumeInfo?.publishedDate})`}
+                </TypographyMuted>
             </div>
         </div>
     );
