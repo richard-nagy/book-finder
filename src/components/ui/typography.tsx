@@ -37,7 +37,7 @@ export function Typography({
         h2: {
             tag: "h2",
             desktopClass: "text-3xl",
-            mobileClass: "text-2xl"
+            mobileClass: "text-2xl",
         },
         h3: {
             tag: "h3",
@@ -47,7 +47,7 @@ export function Typography({
         h4: {
             tag: "h4",
             desktopClass: "text-xl",
-            mobileClass: "text-lg", 
+            mobileClass: "text-lg",
         },
         p: {
             tag: "p",

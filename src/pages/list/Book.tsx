@@ -1,5 +1,5 @@
 import Cover from "@/components/Cover";
-import { TypographyMuted } from "@/components/ui/typography";
+import { Typography } from "@/components/ui/typography";
 import { useIsMobile } from "@/hooks/use-mobile";
 import type { Volume } from "@/lib/types";
 import { type FC, type ReactElement } from "react";
@@ -31,15 +31,15 @@ const Book: FC<BookProps> = ({ book }): ReactElement => {
             />
             {(book.volumeInfo?.authors?.length ?? 0) > 0 ?
                 book.volumeInfo?.authors?.map((a, i) => (
-                    <TypographyMuted key={`author-${i}`}>
+                    <Typography variant="muted" key={`author-${i}`}>
                         {a}
                         {i + 1 !== (book.volumeInfo?.authors?.length ?? 0) &&
                             ","}
-                    </TypographyMuted>
+                    </Typography>
                 ))
-            :   <TypographyMuted className="italic">
+            :   <Typography variant="muted" className="italic">
                     � Unknown author(s)
-                </TypographyMuted>
+                </Typography>
             }
             <div className="mt-1">{book.volumeInfo.title}</div>
         </div>

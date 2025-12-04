@@ -2,7 +2,7 @@ import { BookFinder } from "@/lib/Icons";
 import { LogoSize } from "@/lib/types";
 import { getLogoSize } from "@/lib/utils";
 import type { FC, ReactElement } from "react";
-import { TypographyH2, TypographyH3, TypographyH4 } from "./ui/typography";
+import { Typography } from "./ui/typography";
 
 const appName = "Book Finder";
 
@@ -37,21 +37,33 @@ const Logo: FC<LogoProps> = ({
     switch (size) {
         case LogoSize.large:
             return (
-                <TypographyH2 className={className} onClick={onClick}>
+                <Typography
+                    variant="h2"
+                    className={className}
+                    onClick={onClick}
+                >
                     {logo} {appName}
-                </TypographyH2>
+                </Typography>
             );
         case LogoSize.medium:
             return (
-                <TypographyH3 className={className} onClick={onClick}>
+                <Typography
+                    variant="h3"
+                    className={className}
+                    onClick={onClick}
+                >
                     {logo} {appName}
-                </TypographyH3>
+                </Typography>
             );
         case LogoSize.small:
             return (
-                <TypographyH4 className={className} onClick={onClick}>
+                <Typography
+                    variant="h4"
+                    className={className}
+                    onClick={onClick}
+                >
                     {logo} {appName}
-                </TypographyH4>
+                </Typography>
             );
         default:
             return null;
