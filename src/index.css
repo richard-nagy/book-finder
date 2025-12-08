@@ -144,11 +144,3 @@
 .lucide {
     stroke-width: 2.5px;
 }
-
-.button-custom-hover {
-    transition: background-color 300ms ease-in-out;
-}
-
-.button-custom-hover:hover {
-    background-color: var(--hover);
-}
