@@ -70,7 +70,7 @@ const Book: FC = (): ReactElement => {
     if (volumeFetchIsPending) {
         return (
             <EmptyView
-                icon={<Spinner />}
+                icon={<Spinner className="h-9 w-9" />}
                 title="Loading the Book..."
                 description="Please wait while we are loading the Book."
             />
@@ -80,7 +80,7 @@ const Book: FC = (): ReactElement => {
     if (!volume) {
         return (
             <EmptyView
-                icon={<CircleQuestionMark />}
+                icon={<CircleQuestionMark fontSize={36} />}
                 title="No Book was found..."
                 description="We couldn't find the book."
             />

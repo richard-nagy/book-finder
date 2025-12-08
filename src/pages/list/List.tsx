@@ -29,7 +29,7 @@ const List = () => {
                 <EmptyView
                     title="Loading Books.."
                     description="Fetching data. Please wait."
-                    icon={<Spinner />}
+                    icon={<Spinner className="h-9 w-9" />}
                 />
             :   <div className="flex flex-wrap gap-6 mt-15 justify-center">
                     {(
@@ -38,7 +38,7 @@ const List = () => {
                         !booksOfCurrentPage
                     ) ?
                         <EmptyView
-                            icon={<Frown />}
+                            icon={<Frown fontSize={36} />}
                             description="Your search returned no results."
                             title="No Books Found"
                         />
