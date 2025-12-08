@@ -2,7 +2,7 @@ import EmptyView from "@/components/EmptyView";
 import { Spinner } from "@/components/ui/spinner";
 import { useBook } from "@/context/BookContext";
 import { SearchQuery } from "@/lib/types";
-import Book from "@/pages/list/Book";
+import Book from "@/pages/search/Book";
 import { Frown } from "lucide-react";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -23,6 +23,8 @@ const List = () => {
         [booksByPage, currentPageNumber],
     );
 
+    // TODO: If we open the search page, and there is no search query,
+    // TODO: It returns us the no results view.
     return (
         <div className="flex flex-col gap-10">
             {bookFetchIsPending ?

@@ -1,5 +1,6 @@
 import { useBook } from "@/context/BookContext";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { googleBooksApiKey } from "@/lib/constants";
 import { Page, SearchQuery } from "@/lib/types";
 import { isStringEmpty } from "@/lib/utils";
 import { ArrowLeft, Search } from "lucide-react";
@@ -10,6 +11,7 @@ import {
     useState,
     type FC,
     type KeyboardEvent,
+    type ReactElement,
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchFieldDialog from "./SearchFieldDialog";
@@ -31,7 +33,7 @@ const SearchField: FC<SearchInputProps> = ({
     showBackButton,
     isDialogViewAllowed,
     className,
-}) => {
+}): ReactElement | null => {
     const isMobile = useIsMobile();
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -111,6 +113,10 @@ const SearchField: FC<SearchInputProps> = ({
                 <ArrowLeft />
             </Button>
         :   null;
+
+    if (!googleBooksApiKey) {
+        return null;
+    }
 
     return (
         <div

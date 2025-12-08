@@ -12,7 +12,7 @@ import Book from "./pages/book/Book";
 import CustomErrorBoundary from "./pages/error/CustomErrorBoundary";
 import PageNotFound from "./pages/error/PageNotFound";
 import Homepage from "./pages/homepage/Homepage";
-import List from "./pages/list/List";
+import List from "./pages/search/List";
 
 const router = createBrowserRouter([
     {

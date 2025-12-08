@@ -1,6 +1,12 @@
-import type { FC, JSX, ReactElement } from "react";
+import {
+    type FC,
+    type JSX,
+    type ReactElement,
+    type ReactNode,
+} from "react";
 import {
     Empty,
+    EmptyContent,
     EmptyDescription,
     EmptyHeader,
     EmptyMedia,
@@ -14,12 +20,14 @@ type EmptyViewProps = {
     description: string;
     /** Optional React element (like an SVG icon) to visually represent the state. */
     icon?: JSX.Element;
+    children?: ReactNode;
 };
 
 const EmptyView: FC<EmptyViewProps> = ({
     icon,
     title,
     description,
+    children,
 }): ReactElement => {
     return (
         <Empty className="w-full mt-10">
@@ -27,6 +35,7 @@ const EmptyView: FC<EmptyViewProps> = ({
                 {icon && <EmptyMedia variant="icon">{icon}</EmptyMedia>}
                 <EmptyTitle>{title}</EmptyTitle>
                 <EmptyDescription>{description}</EmptyDescription>
+                {children && <EmptyContent>{children}</EmptyContent>}
             </EmptyHeader>
         </Empty>
     );

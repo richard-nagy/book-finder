@@ -3,11 +3,10 @@ import { attemptFetch, isStringEmpty } from "@/lib/utils";
 import { useCallback, useState, useTransition, type ReactNode } from "react";
 import { toast } from "sonner";
 import { BookContext } from "./BookContext";
+import { googleBooksApiKey } from "@/lib/constants";
 
 /** This is the max number Google Books API allows by default. */
 const maxResults = 40;
-/** API key from the Google Cloud project */
-const apiKey = import.meta.env.VITE_GOOGLE_BOOK_API_KEY;
 /** Base url of the Google Books API */
 const baseUrl = "https://www.googleapis.com/books/v1/volumes";
 /** Max number of retries if the fetch failed. */
@@ -119,20 +118,15 @@ export const BookProvider = ({ children }: BookProviderProps) => {
     const fetchBooks = useCallback(
         async (searchQuery: string | null, pageNumber = 0): Promise<void> => {
             startBookFetch(async () => {
+                if (googleBooksApiKey === undefined) {
+                    return;
+                }
+
                 const sameSearchQuery =
                     currentSearchQuery?.toLocaleLowerCase() ===
                     searchQuery?.toLocaleLowerCase();
 
                 try {
-                    // TODO: Instead of throwing an error if there is no API key,
-                    // TODO: Lets create a banner at the top of the page (below the top bar?),
-                    // TODO: That warns about the missing API key.
-                    // TODO: If the API key is missing, don't even attempt to fetch,
-                    // TODO: And disable the search bar and buttons.
-                    if (!apiKey) {
-                        throw new Error("Missing API Key");
-                    }
-
                     if (!searchQuery || isStringEmpty(searchQuery)) {
                         return;
                     }
@@ -143,7 +137,7 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                     }
 
                     const data = await attemptFetch(
-                        () => fetchBooksCore(searchQuery, pageNumber, apiKey),
+                        () => fetchBooksCore(searchQuery, pageNumber, googleBooksApiKey ?? ""),
                         maxRetries,
                         delayMs,
                     );
@@ -190,19 +184,18 @@ export const BookProvider = ({ children }: BookProviderProps) => {
 
     const fetchVolume = useCallback(
         async (volumeId: string): Promise<void> => {
+            if (googleBooksApiKey === undefined) {
+                return;
+            }
+
             startVolumeFetch(async () => {
                 if (volumeMap?.has(volumeId)) {
                     return;
                 }
 
                 try {
-                    if (!apiKey) {
-                        // TODO: See todo comments in the fetchBooks callback
-                        throw new Error("Missing API Key or Volume ID");
-                    }
-
                     const volume = await attemptFetch(
-                        () => getBookByVolumeIdCore(volumeId, apiKey),
+                        () => getBookByVolumeIdCore(volumeId, googleBooksApiKey ?? ""),
                         maxRetries,
                         delayMs,
                     );

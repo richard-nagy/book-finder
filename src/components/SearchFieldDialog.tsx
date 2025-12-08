@@ -1,3 +1,4 @@
+import { googleBooksApiKey } from "@/lib/constants";
 import { Search, SearchIcon } from "lucide-react";
 import {
     useCallback,
@@ -45,13 +46,17 @@ const SearchFieldDialog: FC<SearchFieldDialogProps> = ({
     navigateToSearchQuery,
     handleKeyDown,
     setInputValue,
-}): ReactElement => {
+}): ReactElement | null => {
     const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
 
     const onSearchClick = useCallback(() => {
         setDialogIsOpen(false);
         navigateToSearchQuery();
     }, [navigateToSearchQuery]);
+
+    if (!googleBooksApiKey) {
+        return null;
+    }
 
     return (
         <Dialog open={dialogIsOpen}>

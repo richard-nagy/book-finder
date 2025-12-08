@@ -1,3 +1,4 @@
+import type { SeverityLevel } from "@/lib/types";
 import { createContext, useContext } from "react";
 import type { ThemeProviderState } from "./ThemeProvider";
 
@@ -16,5 +17,20 @@ export const useTheme = () => {
         throw new Error("useTheme must be used within a ThemeProvider");
     }
 
-    return context;
+    const { theme } = context;
+
+    let resolvedTheme: SeverityLevel;
+
+    if (theme === "system") {
+        resolvedTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+    } else {
+        resolvedTheme = theme;
+    }
+
+    return {
+        ...context,
+        resolvedTheme,
+    };
 };
