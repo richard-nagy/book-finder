@@ -66,12 +66,14 @@ export type SearchQuery = (typeof SearchQuery)[keyof typeof SearchQuery];
 
 /** Page options. */
 export const Page = {
-    /** Identifier for the main book search results page. */
+    /** Book search results page. */
     search: "search",
-    /** Identifier for the individual book detail page. */
+    /** Individual book detail page. */
     book: "book",
-    /** Identifier for the application's starting or home page. */
+    /** Starting or home page. */
     homepage: "homepage",
+    /** No API key page. */
+    noApiKey: "noapikey",
 } as const;
 
 export type Page = (typeof Page)[keyof typeof Page];
