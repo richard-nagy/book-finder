@@ -37,8 +37,15 @@ const SearchField: FC<SearchInputProps> = ({
     const navigate = useNavigate();
     const { currentSearchQuery, fetchBooks } = useBook();
 
+    const isSearchPage = useMemo(
+        () => location.pathname === `/${Page.search}`,
+        [],
+    );
+
     const searchQuery =
-        searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "";
+        isSearchPage ?
+            (searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "")
+        :   "";
 
     const [inputValue, setInputValue] = useState<string>(searchQuery);
 
@@ -67,7 +74,7 @@ const SearchField: FC<SearchInputProps> = ({
     );
 
     const onBackButtonClick = useCallback(() => {
-        if (location.pathname === `/${Page.search}`) {
+        if (isSearchPage) {
             navigate(Page.homepage);
         } else if (location.pathname.includes(`/${Page.book}`)) {
             if (!isStringEmpty(searchQuery)) {
@@ -76,20 +83,23 @@ const SearchField: FC<SearchInputProps> = ({
                 navigate(Page.homepage);
             }
         }
-    }, [navigate, searchQuery]);
+    }, [navigate, searchQuery, isSearchPage]);
 
     useEffect(() => {
         setInputValue(searchQuery);
     }, [searchQuery]);
 
     useEffect(() => {
-        if (
-            location.pathname === `/${Page.homepage}` ||
-            location.pathname === `/${Page.search}`
-        ) {
+        if (isSearchPage && !isInputEmpty) {
             fetchBooks(searchQuery, currentPageNumber);
         }
-    }, [currentPageNumber, fetchBooks, searchQuery]);
+    }, [
+        currentPageNumber,
+        fetchBooks,
+        isInputEmpty,
+        isSearchPage,
+        searchQuery,
+    ]);
 
     const backButton =
         showBackButton ?
