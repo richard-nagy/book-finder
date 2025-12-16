@@ -1,0 +1,25 @@
+{
+    "name": "book-finder-server",
+    "version": "0.1.0",
+    "type": "module",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "express": "^5.2.1"
+    },
+    "scripts": {
+        "start": "tsx src/server.ts",
+        "test": "jest",
+        "format": "prettier --write ."
+    },
+    "devDependencies": {
+        "@types/cors": "^2.8.19",
+        "@types/express": "^5.0.6",
+        "@types/jest": "^30.0.0",
+        "@types/supertest": "^6.0.3",
+        "jest": "^30.2.0",
+        "prettier": "3.7.4",
+        "supertest": "^7.1.4",
+        "tsx": "^4.21.0",
+        "typescript": "^5.9.3"
+    }
+}
