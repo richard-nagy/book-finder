@@ -10,11 +10,21 @@ export default defineConfig({
         tailwindcss(),
         checker({
             typescript: true,
+            eslint: {
+                lintCommand:
+                    'eslint "./src/**/*.{ts,tsx,js,jsx}" --max-warnings=0',
+            },
+            overlay: { initialIsOpen: true },
         }),
     ],
     resolve: {
         alias: {
             "@": path.resolve(__dirname, "./src"),
+        },
+    },
+    server: {
+        hmr: {
+            overlay: true,
         },
     },
 });
