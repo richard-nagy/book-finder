@@ -5,13 +5,13 @@ import { Page, SearchQuery } from "@/lib/types";
 import { isStringEmpty } from "@/lib/utils";
 import { ArrowLeft, Search } from "lucide-react";
 import {
+    type FC,
+    type KeyboardEvent,
+    type ReactElement,
     useCallback,
     useEffect,
     useMemo,
     useState,
-    type FC,
-    type KeyboardEvent,
-    type ReactElement,
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchFieldDialog from "./SearchFieldDialog";
@@ -44,10 +44,13 @@ const SearchField: FC<SearchInputProps> = ({
         [],
     );
 
-    const searchQuery =
-        isSearchPage ?
-            (searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "")
-        :   "";
+    const searchQuery = useMemo(
+        () =>
+            isSearchPage ?
+                (searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "")
+            :   "",
+        [],
+    );
 
     const [inputValue, setInputValue] = useState<string>(searchQuery);
 
@@ -75,25 +78,13 @@ const SearchField: FC<SearchInputProps> = ({
         [inputValue, isInputEmpty, navigateToSearchQuery],
     );
 
-    const onBackButtonClick = useCallback(() => {
-        if (isSearchPage) {
-            navigate(Page.homepage);
-        } else if (location.pathname.includes(`/${Page.book}`)) {
-            if (!isStringEmpty(searchQuery)) {
-                navigate(-1);
-            } else {
-                navigate(Page.homepage);
-            }
-        }
-    }, [navigate, searchQuery, isSearchPage]);
-
     useEffect(() => {
         setInputValue(searchQuery);
     }, [searchQuery]);
 
     useEffect(() => {
         if (isSearchPage && !isInputEmpty) {
-            fetchBooks(searchQuery, currentPageNumber);
+            void fetchBooks(searchQuery, currentPageNumber);
         }
     }, [
         currentPageNumber,
@@ -108,7 +99,7 @@ const SearchField: FC<SearchInputProps> = ({
             <Button
                 size="icon"
                 disabled={!canGoBack}
-                onClick={onBackButtonClick}
+                onClick={() => navigate(-1)}
             >
                 <ArrowLeft />
             </Button>
