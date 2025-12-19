@@ -49,7 +49,7 @@ const SearchField: FC<SearchInputProps> = ({
             isSearchPage ?
                 (searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "")
             :   "",
-        [],
+        [currentSearchQuery, isSearchPage, searchParams],
     );
 
     const [inputValue, setInputValue] = useState<string>(searchQuery);
@@ -63,7 +63,7 @@ const SearchField: FC<SearchInputProps> = ({
 
     const isInputEmpty = useMemo(() => isStringEmpty(inputValue), [inputValue]);
 
-    const navigateToSearchQuery = useCallback(() => {
+    const onSearchClick = useCallback(() => {
         navigate(`/search?q=${inputValue ?? ""}&page=${firstPageNumber}`, {
             relative: "path",
         });
@@ -72,27 +72,22 @@ const SearchField: FC<SearchInputProps> = ({
     const handleKeyDown = useCallback(
         (event: KeyboardEvent<HTMLInputElement>) => {
             if (event.key === "Enter" && inputValue && !isInputEmpty) {
-                navigateToSearchQuery();
+                onSearchClick();
             }
         },
-        [inputValue, isInputEmpty, navigateToSearchQuery],
+        [inputValue, isInputEmpty, onSearchClick],
     );
 
     useEffect(() => {
         setInputValue(searchQuery);
     }, [searchQuery]);
 
+    // If we are on the search page,
     useEffect(() => {
-        if (isSearchPage && !isInputEmpty) {
+        if (isSearchPage) {
             void fetchBooks(searchQuery, currentPageNumber);
         }
-    }, [
-        currentPageNumber,
-        fetchBooks,
-        isInputEmpty,
-        isSearchPage,
-        searchQuery,
-    ]);
+    }, [currentPageNumber, fetchBooks, isSearchPage, searchQuery]);
 
     const backButton =
         showBackButton ?
@@ -119,7 +114,7 @@ const SearchField: FC<SearchInputProps> = ({
                     handleKeyDown={handleKeyDown}
                     inputValue={inputValue}
                     isInputEmpty={isInputEmpty}
-                    navigateToSearchQuery={navigateToSearchQuery}
+                    onSearchClick={onSearchClick}
                     setInputValue={setInputValue}
                 />
             :   <>
@@ -134,7 +129,7 @@ const SearchField: FC<SearchInputProps> = ({
                     <Button
                         size="icon"
                         disabled={isInputEmpty}
-                        onClick={navigateToSearchQuery}
+                        onClick={onSearchClick}
                     >
                         <Search />
                     </Button>

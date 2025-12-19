@@ -31,7 +31,7 @@ type SearchFieldDialogProps = {
      */
     handleKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
     /** Function to execute the search navigation based on the current input value. */
-    navigateToSearchQuery: () => void;
+    onSearchClick: () => void;
     /**
      * Setter function to update the state of the input value.
      *
@@ -43,7 +43,7 @@ type SearchFieldDialogProps = {
 const SearchFieldDialog: FC<SearchFieldDialogProps> = ({
     isInputEmpty,
     inputValue,
-    navigateToSearchQuery,
+    onSearchClick: onSearchClickProp,
     handleKeyDown,
     setInputValue,
 }): ReactElement | null => {
@@ -51,8 +51,8 @@ const SearchFieldDialog: FC<SearchFieldDialogProps> = ({
 
     const onSearchClick = useCallback(() => {
         setDialogIsOpen(false);
-        navigateToSearchQuery();
-    }, [navigateToSearchQuery]);
+        onSearchClickProp();
+    }, [onSearchClickProp]);
 
     if (!googleBooksApiKey) {
         return null;
