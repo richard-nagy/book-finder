@@ -8,7 +8,7 @@ import {
 import App from "./App";
 import "./index.css";
 import { Page } from "./lib/types";
-import Book from "./pages/book/Book";
+import BookDetails from "./pages/book/BookDetails";
 import ApiKeyGuard from "./pages/error/ApiKeyGuard";
 import CustomErrorBoundary from "./pages/error/CustomErrorBoundary";
 import NoApiKey from "./pages/error/NoApiKey";
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: `${Page.book}/:id`,
-                        element: <Book />,
+                        element: <BookDetails />,
                     },
                     {
                         path: Page.homepage,

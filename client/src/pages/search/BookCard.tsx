@@ -9,7 +9,7 @@ type BookProps = {
     book: Volume;
 };
 
-const Book: FC<BookProps> = ({ book }): ReactElement => {
+const BookCard: FC<BookProps> = ({ book }): ReactElement => {
     const navigate = useNavigate();
 
     const navigateToBook = () => {
@@ -21,7 +21,7 @@ const Book: FC<BookProps> = ({ book }): ReactElement => {
             <Cover
                 className="mb-2"
                 src={book.volumeInfo?.imageLinks?.smallThumbnail}
-                alt={book.id + "-img"}
+                alt={`${book.id}-img`}
             />
             {(book.volumeInfo?.authors?.length ?? 0) > 0 ?
                 book.volumeInfo?.authors?.map((a, i) => (
@@ -40,4 +40,4 @@ const Book: FC<BookProps> = ({ book }): ReactElement => {
     );
 };
 
-export default Book;
+export default BookCard;

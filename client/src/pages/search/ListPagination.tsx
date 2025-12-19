@@ -8,6 +8,7 @@ import {
     PaginationPrevious,
 } from "@/components/ui/pagination";
 import { useBook } from "@/context/BookContext";
+import { firstPage } from "@/lib/constants";
 import { SearchQuery } from "@/lib/types";
 import { useCallback, useMemo, type FC, type ReactElement } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -20,7 +21,10 @@ const ListPagination: FC = (): ReactElement | null => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const currentPageNumber = useMemo(
-        () => parseInt(searchParams.get(SearchQuery.page) ?? "1"),
+        () =>
+            parseInt(
+                searchParams.get(SearchQuery.page) ?? firstPage.toString(),
+            ),
         [searchParams],
     );
 

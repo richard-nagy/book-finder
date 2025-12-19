@@ -1,6 +1,6 @@
 import { useBook } from "@/context/BookContext";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { googleBooksApiKey } from "@/lib/constants";
+import { firstPage, googleBooksApiKey } from "@/lib/constants";
 import { Page, SearchQuery } from "@/lib/types";
 import { isStringEmpty } from "@/lib/utils";
 import { ArrowLeft, Search } from "lucide-react";
@@ -11,14 +11,13 @@ import {
     useCallback,
     useEffect,
     useMemo,
+    useRef,
     useState,
 } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import SearchFieldDialog from "./SearchFieldDialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-
-const firstPageNumber = "1";
 
 type SearchInputProps = {
     /** If true, show a back button. */
@@ -39,6 +38,13 @@ const SearchField: FC<SearchInputProps> = ({
     const navigate = useNavigate();
     const { currentSearchQuery, fetchBooks } = useBook();
 
+    // Store fetchBooks in a ref to prevent unnecessary effect re-runs
+    const fetchBooksRef = useRef(fetchBooks);
+
+    useEffect(() => {
+        fetchBooksRef.current = fetchBooks;
+    }, [fetchBooks]);
+
     const isSearchPage = useMemo(
         () => location.pathname === `/${Page.search}`,
         [],
@@ -57,14 +63,17 @@ const SearchField: FC<SearchInputProps> = ({
     const canGoBack = (history.state?.idx ?? 0) > 0;
 
     const currentPageNumber = useMemo(
-        () => parseInt(searchParams.get(SearchQuery.page) ?? firstPageNumber),
+        () =>
+            parseInt(
+                searchParams.get(SearchQuery.page) ?? firstPage.toString(),
+            ),
         [searchParams],
     );
 
     const isInputEmpty = useMemo(() => isStringEmpty(inputValue), [inputValue]);
 
     const onSearchClick = useCallback(() => {
-        navigate(`/search?q=${inputValue ?? ""}&page=${firstPageNumber}`, {
+        navigate(`/search?q=${inputValue ?? ""}&page=${firstPage}`, {
             relative: "path",
         });
     }, [inputValue, navigate]);
@@ -85,9 +94,9 @@ const SearchField: FC<SearchInputProps> = ({
     // If we are on the search page,
     useEffect(() => {
         if (isSearchPage) {
-            void fetchBooks(searchQuery, currentPageNumber);
+            void fetchBooksRef.current(searchQuery, currentPageNumber);
         }
-    }, [currentPageNumber, fetchBooks, isSearchPage, searchQuery]);
+    }, [currentPageNumber, isSearchPage, searchQuery]);
 
     const backButton =
         showBackButton ?

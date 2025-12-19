@@ -1,28 +1,31 @@
+import {
+    bookPerPage,
+    firstPage,
+    googleBooksApiKey,
+    googleBooksBaseUrl,
+    maxRetries,
+    retryDelayMs,
+} from "@/lib/constants";
 import type { BookResponse, Volume } from "@/lib/types";
 import { attemptFetch, isStringEmpty } from "@/lib/utils";
-import { useCallback, useState, useTransition, type ReactNode } from "react";
+import {
+    useCallback,
+    useState,
+    useTransition,
+    type ReactNode
+} from "react";
 import { toast } from "sonner";
 import { BookContext } from "./BookContext";
-import { googleBooksApiKey } from "@/lib/constants";
-
-/** This is the max number Google Books API allows by default. */
-const maxResults = 40;
-/** Base url of the Google Books API */
-const baseUrl = "https://www.googleapis.com/books/v1/volumes";
-/** Max number of retries if the fetch failed. */
-const maxRetries = 3;
-/** Delay time in ms if the fetch failed. */
-const delayMs = 1000;
 
 const fetchBooksCore = async (
     searchQuery: string,
     startIndex: number,
     apiKey: string,
 ): Promise<BookResponse> => {
-    const url = `${baseUrl}?q=${encodeURIComponent(
+    const url = `${googleBooksBaseUrl}?q=${encodeURIComponent(
         searchQuery,
-    )}&key=${apiKey}&maxResults=${maxResults}&startIndex=${
-        (startIndex - 1) * maxResults
+    )}&key=${apiKey}&maxResults=${bookPerPage}&startIndex=${
+        (startIndex - 1) * bookPerPage
     }`;
 
     const response = await fetch(url);
@@ -41,7 +44,7 @@ const getBookByVolumeIdCore = async (
     volumeId: string,
     apiKey: string,
 ): Promise<Volume> => {
-    const url = `${baseUrl}/${volumeId}?key=${apiKey}`;
+    const url = `${googleBooksBaseUrl}/${volumeId}?key=${apiKey}`;
 
     const response = await fetch(url);
 
@@ -59,7 +62,7 @@ export type BookContextType = {
      * If null, there are no results.
      */
     booksByPage: Map<number, Volume[]> | null;
-    /** */
+    /** Map of cached individual book volumes by their volume ID. */
     volumeMap: Map<string, Volume> | null;
     /**
      * Number of available pages.
@@ -115,10 +118,12 @@ export const BookProvider = ({ children }: BookProviderProps) => {
     }, []);
 
     const fetchBooks = useCallback(
-        async (searchQuery: string | null, pageNumber = 0): Promise<void> => {
+        async (searchQuery: string | null, pageNumberIndex = firstPage - 1): Promise<void> => {
             if (googleBooksApiKey === undefined) {
                 return;
             }
+            
+            const apiKey = googleBooksApiKey;
 
             const sameSearchQuery =
                 currentSearchQuery?.toLocaleLowerCase() ===
@@ -138,7 +143,7 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                     }
 
                     // If it's the same search query and we already got the books for the page, don't repeat the fetch.
-                    if (sameSearchQuery && booksByPage?.has(pageNumber)) {
+                    if (sameSearchQuery && booksByPage?.has(pageNumberIndex)) {
                         return;
                     }
 
@@ -146,22 +151,29 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                         () =>
                             fetchBooksCore(
                                 searchQuery,
-                                pageNumber,
-                                googleBooksApiKey ?? "",
+                                pageNumberIndex,
+                                apiKey,
                             ),
                         maxRetries,
-                        delayMs,
+                        retryDelayMs,
                     );
 
-                    if (data.items && data.items.length > 0 && data.totalItems > 0) {
-                        setMaxNumberOfPages(Math.ceil(data.totalItems / maxResults));
+                    if (
+                        data.items &&
+                        data.items.length > 0 &&
+                        data.totalItems > 0
+                    ) {
+                        const items = data.items; // Capture for type narrowing
+                        setMaxNumberOfPages(
+                            Math.ceil(data.totalItems / bookPerPage),
+                        );
                         setBooksByPage((ob) => {
                             const newBooks = new Map(
                                 // If we have the same search query, we keep the previous results,
                                 // otherwise we clear it out.
                                 sameSearchQuery ? [...(ob ?? [])] : [],
                             );
-                            newBooks.set(pageNumber, data.items ?? []);
+                            newBooks.set(pageNumberIndex, items);
                             return newBooks;
                         });
                     }
@@ -186,6 +198,7 @@ export const BookProvider = ({ children }: BookProviderProps) => {
             if (googleBooksApiKey === undefined) {
                 return;
             }
+            const apiKey = googleBooksApiKey; // Capture for type narrowing
 
             startVolumeFetch(async () => {
                 if (volumeMap?.has(volumeId)) {
@@ -195,12 +208,9 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                 try {
                     const volume = await attemptFetch(
                         () =>
-                            getBookByVolumeIdCore(
-                                volumeId,
-                                googleBooksApiKey ?? "",
-                            ),
+                            getBookByVolumeIdCore(volumeId, apiKey),
                         maxRetries,
-                        delayMs,
+                        retryDelayMs,
                     );
 
                     if (volume) {
@@ -211,7 +221,15 @@ export const BookProvider = ({ children }: BookProviderProps) => {
                         });
                     }
                 } catch (error) {
+                    let errorMessage = "An unknown error occurred.";
+                    if (error instanceof Error) {
+                        errorMessage = error.message;
+                    }
+
                     console.error("Error fetching book data:", error);
+                    toast.error("Failed to Load Book", {
+                        description: `Error details: ${errorMessage}`,
+                    });
                 }
             });
         },

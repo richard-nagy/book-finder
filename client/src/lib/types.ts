@@ -9,7 +9,7 @@ export type Volume = {
         /** The secondary title or subtitle of the book. */
         subtitle?: string;
         /** An array of authors who wrote the book. */
-        authors?: [string];
+        authors?: string[];
         /** The publisher of the book. */
         publisher?: string;
         /** The date the book was published (often in YYYY-MM-DD format). */

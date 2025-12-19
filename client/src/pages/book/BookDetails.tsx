@@ -51,7 +51,7 @@ const DescriptionAndPublisher: FC<{ volumeInfo: Volume["volumeInfo"] }> = ({
     </div>
 );
 
-const Book: FC = (): ReactElement => {
+const BookDetails: FC = (): ReactElement => {
     const { id } = useParams<{ id: string }>();
     const { volumeFetchIsPending, volumeMap, fetchVolume } = useBook();
     const isMobile = useIsMobile();
@@ -94,7 +94,7 @@ const Book: FC = (): ReactElement => {
             <div className={`flex items-start justify-center gap-10`}>
                 {/* Cover */}
                 <Cover
-                    alt={volume.id + "img"}
+                    alt={`${volume.id}-img`}
                     className="object-cover mb-2"
                     src={volumeInfo?.imageLinks?.smallThumbnail}
                 />
@@ -158,4 +158,4 @@ const Book: FC = (): ReactElement => {
     );
 };
 
-export default Book;
+export default BookDetails;

@@ -1,8 +1,9 @@
 import EmptyView from "@/components/EmptyView";
 import { Spinner } from "@/components/ui/spinner";
 import { useBook } from "@/context/BookContext";
+import { firstPage } from "@/lib/constants";
 import { SearchQuery } from "@/lib/types";
-import Book from "@/pages/search/Book";
+import BookCard from "@/pages/search/BookCard";
 import { Frown } from "lucide-react";
 import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -14,7 +15,7 @@ const List = () => {
     const [searchParams] = useSearchParams();
 
     const currentPageNumber = useMemo(
-        () => parseInt(searchParams.get(SearchQuery.page) ?? "0"),
+        () => parseInt(searchParams.get(SearchQuery.page) ?? firstPage.toString()),
         [searchParams],
     );
 
@@ -47,7 +48,7 @@ const List = () => {
                 booksOfCurrentPage.length > 0 && (
                     <div className="flex flex-wrap gap-6 mt-15 justify-center">
                         {booksOfCurrentPage.map((b) => (
-                            <Book key={b.id} book={b} />
+                            <BookCard key={b.id} book={b} />
                         ))}
                     </div>
                 )}
