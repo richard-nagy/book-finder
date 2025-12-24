@@ -34,4 +34,20 @@ export default class VisitController {
             next(error);
         }
     }
+
+    static async getMany(req: Request, res: Response, next: NextFunction) {
+        try {
+            const manyBookVisits = await VisitsService.getManyBookVisits(
+                req.body.ids,
+            );
+            const response: ApiResponse<IVisitCounter[]> = {
+                message: "Ok",
+                ok: true,
+                data: manyBookVisits,
+            };
+            res.json(response);
+        } catch (error) {
+            next(error);
+        }
+    }
 }

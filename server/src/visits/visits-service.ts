@@ -16,4 +16,11 @@ export class VisitsService {
     public static getBookVisits(id: string): number {
         return visitsMap.get(id) ?? 0;
     }
+
+    public static getManyBookVisits(ids: string[]): IVisitCounter[] {
+        return ids.map((id) => ({
+            id: id,
+            count: visitsMap.get(id) ?? 0,
+        }));
+    }
 }
