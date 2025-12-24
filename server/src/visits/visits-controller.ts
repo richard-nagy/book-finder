@@ -5,11 +5,11 @@ import { VisitsService } from "./visits-service.js";
 export default class VisitController {
     static async post(req: Request, res: Response, next: NextFunction) {
         try {
-            const contact = await VisitsService.increment(req.body.identifier);
+            const visitCounter = await VisitsService.increment(req.body.id);
             const response: ApiResponse<IVisitCounter> = {
                 message: "Ok",
                 ok: true,
-                data: contact,
+                data: visitCounter,
             };
             res.json(response);
         } catch (error) {
@@ -23,11 +23,11 @@ export default class VisitController {
         next: NextFunction,
     ) {
         try {
-            const contact = await VisitsService.getBookVisits(req.params.id);
+            const visitCount = await VisitsService.getBookVisits(req.params.id);
             const response: ApiResponse<number> = {
                 message: "Ok",
                 ok: true,
-                data: contact,
+                data: visitCount,
             };
             res.json(response);
         } catch (error) {

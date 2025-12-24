@@ -4,16 +4,16 @@ import type { IVisitCounter } from "../../types.js";
 const visitsMap: Map<string, number> = new Map();
 
 export class VisitsService {
-    public static increment(identifier: string): IVisitCounter {
-        const currentCount = visitsMap.get(identifier) ?? 0;
+    public static increment(id: string): IVisitCounter {
+        const currentCount = visitsMap.get(id) ?? 0;
         const newCount = currentCount + 1;
 
-        visitsMap.set(identifier, newCount);
+        visitsMap.set(id, newCount);
 
-        return { id: identifier, count: newCount };
+        return { id: id, count: newCount };
     }
 
-    public static getBookVisits(identifier: string): number {
-        return visitsMap.get(identifier) ?? 0;
+    public static getBookVisits(id: string): number {
+        return visitsMap.get(id) ?? 0;
     }
 }

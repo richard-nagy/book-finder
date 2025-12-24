@@ -1,12 +1,17 @@
 import cors from "cors";
-import type { Express } from "express";
+import type { Express, NextFunction, Request, Response } from "express";
 import express from "express";
 import { visitsRouter } from "./visits/visits-routes.js";
 
 const app: Express = express();
 
-// Current development setup - adjust as needed for production
-const allowedOrigins = ["http://localhost:5173"];
+// Environment-based CORS configuration
+const allowedOrigins =
+    process.env.NODE_ENV === "production" ?
+        process.env.CLIENT_URL ?
+            [process.env.CLIENT_URL]
+        :   []
+    :   ["http://localhost:5173"];
 
 app.use(
     cors({
@@ -28,5 +33,14 @@ app.use(
 
 app.use(express.json());
 app.use("/api", visitsRouter);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error("Error:", err.message);
+    res.status(500).json({
+        message: err.message || "Internal Server Error",
+        ok: false,
+        data: null,
+    });
+});
 
 export default app;

@@ -66,7 +66,7 @@ POST /api/visits/increment
 Content-Type: application/json
 
 {
-  "identifier": "book-id-123"
+  "id": "book-id-123"
 }
 
 Response: {
