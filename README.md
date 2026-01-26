@@ -1,6 +1,8 @@
-# 📚 Book Finder
+# 📚 Book Finder v0.1.0
 
 A full-stack application for discovering and managing books using the Google Books API. Built with React, TypeScript, and Node.js, this application allows users to search for books, view detailed information, and interact with their favorite titles through a modern, responsive interface.
+
+<img width="1280" height="640" alt="preview" src="https://github.com/user-attachments/assets/34b00d19-a585-4664-9c97-40ff5a3fe4bf" />
 
 ---
 
