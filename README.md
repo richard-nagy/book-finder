@@ -105,7 +105,6 @@ This is a **monorepo** containing two main applications:
 - Tailwind CSS
 - shadcn/ui (Radix UI)
 - React Router DOM
-- Zustand/Context API for state management
 
 ### Backend
 - Node.js
