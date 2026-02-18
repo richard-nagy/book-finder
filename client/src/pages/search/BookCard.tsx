@@ -49,12 +49,14 @@ const BookCard: FC<BookProps> = ({ book, visitCount }): ReactElement => {
                         ({book.volumeInfo.ratingsCount ?? 0})
                     </Typography>
                 </div>
-                <div className="flex gap-1 items-center">
-                    <Eye className="text-muted-foreground" size="18" />
-                    <Typography variant="muted" className="font-m font-bold">
-                        {visitCount}
-                    </Typography>
-                </div>
+                {import.meta.env.DEV && (
+                    <div className="flex gap-1 items-center">
+                        <Eye className="text-muted-foreground" size="18" />
+                        <Typography variant="muted" className="font-m font-bold">
+                            {visitCount}
+                        </Typography>
+                    </div>
+                )}
             </div>
         </div>
     );

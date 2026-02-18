@@ -163,13 +163,15 @@ const BookDetails: FC = (): ReactElement => {
                                 </Typography>
                             </div>
 
-                            {/* View count */}
-                            <div className="flex gap-2 items-center">
-                                <Eye size={iconSize} />
-                                <Typography variant="p" className="font-bold">
-                                    {visitCount}
-                                </Typography>
-                            </div>
+                            {/* View count (only in dev mode) */}
+                            {import.meta.env.DEV && (
+                                <div className="flex gap-2 items-center">
+                                    <Eye size={iconSize} />
+                                    <Typography variant="p" className="font-bold">
+                                        {visitCount}
+                                    </Typography>
+                                </div>
+                            )}
                         </div>
                     </div>
 

@@ -34,6 +34,8 @@ const List = () => {
     );
 
     useEffect(() => {
+        if (!import.meta.env.DEV) return;
+
         const fetchIncrementVisit = async () => {
             if (!booksOfCurrentPage) return;
 

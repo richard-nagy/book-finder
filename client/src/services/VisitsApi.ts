@@ -8,6 +8,9 @@ const apiBaseUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
  * @returns The updated visit counter.
  */
 export async function incrementVisit(bookId: string): Promise<VisitCounter> {
+    if (!import.meta.env.DEV) {
+        return Promise.resolve({ id: bookId, count: 0 });
+    }
     const response = await fetch(`${apiBaseUrl}/api/visits/increment`, {
         method: "POST",
         headers: {
@@ -30,6 +33,9 @@ export async function incrementVisit(bookId: string): Promise<VisitCounter> {
  * @returns The number of visits.
  */
 export async function getVisitCount(bookId: string): Promise<number> {
+    if (!import.meta.env.DEV) {
+        return Promise.resolve(0);
+    }
     const response = await fetch(`${apiBaseUrl}/api/visits/${bookId}`);
 
     if (!response.ok) {
@@ -48,6 +54,9 @@ export async function getVisitCount(bookId: string): Promise<number> {
 export async function getVisitCountBatch(
     bookIds: string[],
 ): Promise<VisitCounter[]> {
+    if (!import.meta.env.DEV) {
+        return Promise.resolve(bookIds.map(id => ({ id, count: 0 })));
+    }
     const response = await fetch(`${apiBaseUrl}/api/visits/batch`, {
         method: "POST",
         headers: {
