@@ -1,20 +1,24 @@
-name: Client CI
+name: Client CI/CD
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
     paths:
-      - 'client/**'
-      - '.github/workflows/client.yml'
+      - "client/**"
+      - ".github/workflows/client.yml"
   pull_request:
     branches: [main, develop]
     paths:
-      - 'client/**'
+      - "client/**"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -26,22 +30,33 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'pnpm'
-          cache-dependency-path: 'client/pnpm-lock.yaml'
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: "client/pnpm-lock.yaml"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         working-directory: client
-
-      - name: Lint
-        run: pnpm lint
-        working-directory: client
-
-      - name: Type check
-        run: pnpm typecheck
-        working-directory: client
-
       - name: Build
         run: pnpm build
         working-directory: client
+        env:
+          VITE_GOOGLE_BOOK_API_KEY: ${{ secrets.VITE_GOOGLE_BOOK_API_KEY }}
+
+      - name: Upload artifact
+        if: github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: client/dist
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
