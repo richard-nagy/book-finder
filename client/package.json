@@ -5,7 +5,8 @@
     "type": "module",
     "scripts": {
         "dev": "vite",
-        "build": "tsc -b && vite build",
+        "build": "tsc -b && vite build && pnpm run postbuild",
+        "postbuild": "cpy dist/index.html dist/404.html --rename=404.html",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
         "preview": "vite preview"
@@ -39,6 +40,7 @@
         "@types/react": "^19.2.2",
         "@types/react-dom": "^19.2.2",
         "@vitejs/plugin-react": "^5.1.0",
+        "cpy-cli": "^7.0.0",
         "eslint": "^8.57.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
