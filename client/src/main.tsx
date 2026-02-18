@@ -16,44 +16,49 @@ import PageNotFound from "./pages/error/PageNotFound";
 import Homepage from "./pages/homepage/Homepage";
 import List from "./pages/search/List";
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+    [
+        {
+            path: "/",
+            element: <App />,
+            errorElement: <CustomErrorBoundary />,
+            children: [
+                {
+                    path: "/",
+                    element: <Navigate to={Page.homepage} />,
+                },
+                {
+                    path: Page.noApiKey,
+                    element: <NoApiKey />,
+                },
+                {
+                    element: <ApiKeyGuard />,
+                    children: [
+                        {
+                            path: Page.search,
+                            element: <List />,
+                        },
+                        {
+                            path: `${Page.book}/:id`,
+                            element: <BookDetails />,
+                        },
+                        {
+                            path: Page.homepage,
+                            element: <Homepage />,
+                        },
+                    ],
+                },
+                {
+                    path: "*",
+                    element: <PageNotFound />,
+                },
+            ],
+        },
+    ],
     {
-        path: "/",
-        element: <App />,
-        errorElement: <CustomErrorBoundary />,
-        children: [
-            {
-                path: "/",
-                element: <Navigate to={Page.homepage} />,
-            },
-            {
-                path: Page.noApiKey,
-                element: <NoApiKey />,
-            },
-            {
-                element: <ApiKeyGuard />,
-                children: [
-                    {
-                        path: Page.search,
-                        element: <List />,
-                    },
-                    {
-                        path: `${Page.book}/:id`,
-                        element: <BookDetails />,
-                    },
-                    {
-                        path: Page.homepage,
-                        element: <Homepage />,
-                    },
-                ],
-            },
-            {
-                path: "*",
-                element: <PageNotFound />,
-            },
-        ],
+        basename: "/book-finder",
     },
-]);
+);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
