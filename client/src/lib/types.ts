@@ -66,6 +66,8 @@ export type SearchQuery = (typeof SearchQuery)[keyof typeof SearchQuery];
 
 /** Page options. */
 export const Page = {
+    /** Base name for the application routes. */
+    baseName: "book-finder",
     /** Book search results page. */
     search: "search",
     /** Individual book detail page. */

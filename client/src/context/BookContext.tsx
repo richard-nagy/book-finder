@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { BookContextType as BookContextType } from "./BookProvider";
+import type { BookContextType } from "./BookProvider";
 
 export const BookContext = createContext<BookContextType | undefined>(
     undefined,

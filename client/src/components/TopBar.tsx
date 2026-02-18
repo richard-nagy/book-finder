@@ -14,7 +14,7 @@ const TopBar: FC = (): ReactElement => {
     const isMobile = useIsMobile();
 
     const isHomePage = useMemo(
-        () => location.pathname === `/${Page.homepage}`,
+        () => location.pathname.includes(`/${Page.homepage}`),
         [location.pathname],
     );
 

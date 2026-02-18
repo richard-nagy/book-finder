@@ -14,7 +14,7 @@ import {
     useRef,
     useState,
 } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import SearchFieldDialog from "./SearchFieldDialog";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -37,6 +37,7 @@ const SearchField: FC<SearchInputProps> = ({
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { currentSearchQuery, fetchBooks } = useBook();
+    const location = useLocation();
 
     // Store fetchBooks in a ref to prevent unnecessary effect re-runs
     const fetchBooksRef = useRef(fetchBooks);
@@ -46,15 +47,15 @@ const SearchField: FC<SearchInputProps> = ({
     }, [fetchBooks]);
 
     const isSearchPage = useMemo(
-        () => location.pathname === `/${Page.search}`,
-        [],
+        () => location.pathname.includes(`/${Page.search}`),
+        [location.pathname],
     );
 
     const searchQuery = useMemo(
         () =>
             isSearchPage ?
                 (searchParams.get(SearchQuery.q) ?? currentSearchQuery ?? "")
-            :   "",
+                : "",
         [currentSearchQuery, isSearchPage, searchParams],
     );
 
@@ -107,7 +108,7 @@ const SearchField: FC<SearchInputProps> = ({
             >
                 <ArrowLeft />
             </Button>
-        :   null;
+            : null;
 
     if (!googleBooksApiKey) {
         return null;
@@ -126,7 +127,7 @@ const SearchField: FC<SearchInputProps> = ({
                     onSearchClick={onSearchClick}
                     setInputValue={setInputValue}
                 />
-            :   <>
+                : <>
                     <Input
                         className="w-75"
                         type="text"

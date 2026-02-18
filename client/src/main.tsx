@@ -56,7 +56,7 @@ const router = createBrowserRouter(
         },
     ],
     {
-        basename: "/book-finder",
+        basename: `/${Page.baseName}`,
     },
 );
 
